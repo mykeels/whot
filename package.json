@@ -1,0 +1,24 @@
+{
+  "name": "whot",
+  "version": "1.0.0",
+  "description": "A Game API for the Nigerian Whot Card Game",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mykeels/whot.git"
+  },
+  "keywords": [
+    "whot",
+    "cards",
+    "game"
+  ],
+  "author": "mykeels",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mykeels/whot/issues"
+  },
+  "homepage": "https://github.com/mykeels/whot#readme"
+}
