@@ -13,6 +13,14 @@ const Card = function (props = {}) {
     this.value = props.value
     this.shape = props.shape
     this.image = props.image
+    
+    const self = this;
+    Object.assign(this, {
+        get score() {
+            if (self.shape === Shapes.Star) return self.value * 2
+            else return self.value
+        }
+    })
 }
 
 module.exports = Card
