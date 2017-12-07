@@ -2,7 +2,7 @@
  * shapes determine the type of a card
  */
 
-export default {
+module.exports = {
     Circle: 'Circle',
     Triangle: 'Triangle',
     Cross: 'Cross',
