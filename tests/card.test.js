@@ -16,7 +16,15 @@ describe('Card', () => {
         const circle = GetCircle({
             value: 1
         })
-        console.log(circle)
         assert.equal(circle.score, 1)
+    })
+    
+    describe('star', () => {
+        it('should have a double score', () => {
+            const star = GetStar({
+                value: 1
+            })
+            assert.equal(star.score, 2)
+        })
     })
 })
