@@ -24,6 +24,10 @@ function Deck() {
                 .concat(squares.map(value => (GetSquare({ value }))))
                 .concat(stars.map(value => (GetStar({ value }))))
                 .concat(whots.map(value => (GetWhot({ value }))))
+
+  this.shuffle = () => {
+      return this.cards.map((card, index) => index).sort((a, b) => Math.random() - 0.5).map(index => this.cards[index])
+  }
 }
 
 module.exports = Deck
