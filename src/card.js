@@ -1,9 +1,20 @@
-const Shapes = require('../shapes')
+const Shapes = require('./shapes')
+
+/**
+ * Generate a new Card, which may be of any shape and value
+ * 
+ * @param {Object} props
+ * @param {Number} props.value
+ * @param {Number} props.shape
+ * @param {String} props.image (optional)
+ * @param {Number} props.hiddenValue
+ */
 
 const Card = function (props = {}) {
     this.value = props.value
     this.shape = props.shape
     this.image = props.image
+    this.hiddenValue = props.hiddenValue
 }
 
 module.exports = Card
