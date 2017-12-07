@@ -7,14 +7,12 @@ const Shapes = require('./shapes')
  * @param {Number} props.value
  * @param {Number} props.shape
  * @param {String} props.image (optional)
- * @param {Number} props.hiddenValue
  */
 
 const Card = function (props = {}) {
     this.value = props.value
     this.shape = props.shape
     this.image = props.image
-    this.hiddenValue = props.hiddenValue
 }
 
 module.exports = Card
