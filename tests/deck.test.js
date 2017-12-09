@@ -1,7 +1,7 @@
 const { assert } = require('chai')
 const Deck = require('../src/deck')
-const Card = require("../src/card");
-const Shapes = require("../src/shapes");
+const Card = require("../src/card")
+const Shapes = require("../src/shapes")
 
 const MAX_NO_OF_CARDS = 54
 
