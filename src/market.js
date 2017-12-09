@@ -10,23 +10,30 @@ const OutOfRangeError = createError('OutOfRangeError')
 
 /**
  * 
- * @param {Number} noOfDecks how many card decks should be in the market?
+ * @param {Object} props
+ * @param {Number} props.noOfDecks how many card decks should be in the market?
+ * @param {Function} props.pile returns Pile instance
  */
-const Market = function (noOfDecks = 1) {
-    const cards = []
+const Market = function (props = {}) {
+    props.noOfDecks = props.noOfDecks || 1 
 
-    for (let i = 1; i<= noOfDecks; i++) {
+    let cards = []
+
+    for (let i = 1; i<= props.noOfDecks; i++) {
         const deck = new Deck()
         deck.shuffle().forEach(card => cards.push(card))
     }
 
     this.pick = (no = 1) => {
         if (no >= cards.length) {
-            throw OutOfRangeError('cards')
+            if (!props.pile) throw OutOfRangeError('cards')
+            else {
+                // get more cards from the pile
+                props.pile().reset().forEach(card => cards.push(card))
+                cards = cards.sort((a, b) => Math.random() - 0.5)
+            }
         }
-        else {
-            return cards.splice(0, no)
-        }
+        return cards.splice(0, no)
     }
 
     this.count = () => cards.length

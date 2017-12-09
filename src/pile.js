@@ -28,6 +28,10 @@ const Pile = function () {
             throw NoCardSuppliedError()
         }
     }
+
+    this.reset = () => {
+        return cards.splice(0, cards.length - 1)
+    }
 }
 
 module.exports = Pile
