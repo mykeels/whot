@@ -6,26 +6,32 @@ const { createTypeError } = require('./errors')
 const EventEmitter = require('events').EventEmitter
 const logger = require('./logger')('player.js')
 
+const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
 const LastCardMismatchError = createError('LastCardMismatchError') //to block attempts to play a card that doesn't match the top card in the pile
 const NoCardSuppliedError = createError('NoCardSuppliedError') //to block attempts to play no cards
 
 const Pile = function () {
     const cards = []
 
-    this.top = () => cards[cards.length - 1]
+    this.top = () => (cards[cards.length - 1] || null)
 
     this.push = (_cards_ = []) => {
-        if (_cards_.length > 0) {
-            const lastCard = _cards_[_cards_.length - 1]
-            if (!this.top() || this.top().matches(lastCard)) {
-                _cards_.forEach(card => cards.push(card))
+        if (Array.isArray(_cards_)) {
+            if (_cards_.length > 0) {
+                const lastCard = _cards_[_cards_.length - 1]
+                if (!this.top() || this.top().matches(lastCard)) {
+                    _cards_.forEach(card => cards.push(card))
+                }
+                else {
+                    throw LastCardMismatchError({ pile: this.top(), play: lastCard })
+                }
             }
             else {
-                throw LastCardMismatchError({ pile: this.top(), play: lastCard })
+                throw NoCardSuppliedError()
             }
         }
         else {
-            throw NoCardSuppliedError()
+            throw InvalidArgumentTypeError('_cards_', Array)
         }
     }
 
