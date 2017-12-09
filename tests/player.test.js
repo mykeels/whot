@@ -2,6 +2,8 @@ const { assert } = require('chai')
 const Player = require('../src/player')
 const EventEmitter = require('events').EventEmitter
 
+const mockMarket = () => { pick: (num = 0) => (new Array(0)) }
+
 describe('Player', () => {
     describe('Constructor', () => {
         it('should throw InvalidArgumentError if props argument is not supplied', () => {
@@ -43,11 +45,43 @@ describe('Player', () => {
             }
         })
         
+        it('should throw InvalidArgumentError if props.market argument is either not supplied, or is supplied but is not a function', () => {
+            try {
+                const player = new Player({ 
+                    id: 1, 
+                    validator: (card) => true,
+                    emitter: {}
+                })
+
+                assert.fail()
+            }
+            catch (err) {
+                assert.equal(err.name, 'InvalidArgumentError')
+                assert.equal(err.message, 'props.market')
+            }
+
+            try {
+                const player = new Player({ 
+                    id: 1, 
+                    validator: (card) => true,
+                    emitter: {},
+                    market: {}
+                })
+                
+                assert.fail()
+            }
+            catch (err) {
+                assert.equal(err.name, 'InvalidArgumentError')
+                assert.equal(err.message, 'props.market')
+            }
+        })
+        
         it('should work when appropriate values are passed', () => {
             const player = new Player({ 
                 id: 1, 
                 validator: (card) => true,
-                emitter: {}
+                emitter: {},
+                market: mockMarket
             })
         })
     })
@@ -56,7 +90,8 @@ describe('Player', () => {
         const player = new Player({ 
             id: 1, 
             validator: (card) => false,
-            emitter: {}
+            emitter: {},
+            market: mockMarket
         })
         describe('Count', () => {
             it('should initially be 0', () => {
@@ -127,7 +162,8 @@ describe('Player', () => {
                 let somePlayer = new Player({ 
                     id: 1, 
                     validator: (card) => true,
-                    emitter: new EventEmitter()
+                    emitter: new EventEmitter(),
+                    market: mockMarket
                 })
                 somePlayer.turn = true
                 somePlayer.add([{}, {}])
