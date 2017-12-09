@@ -6,7 +6,6 @@ module.exports = Events
 
 module.exports.EventEmitter = EventEmitter
 
-module.exports.raiseEvent = (name, callback, ...args) => {
-    callback(...args)
+module.exports.raiseEvent = (name, ...args) => {
     Events.emit(name, ...args)   
 }

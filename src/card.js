@@ -14,6 +14,13 @@ const Card = function (props = {}) {
     this.shape = props.shape
     this.image = props.image
     
+    this.matches = (card = new Card()) => {
+        return (card.shape === this.shape) || 
+                (card.value === this.value) ||
+                (card.shape === Shapes.Whot) ||
+                (this.shape === Shapes.Whot)
+    }
+    
     const self = this;
     Object.assign(this, {
         get score() {
