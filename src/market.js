@@ -8,6 +8,10 @@ const logger = require('./logger')('player.js')
 
 const OutOfRangeError = createError('OutOfRangeError')
 
+/**
+ * 
+ * @param {Number} noOfDecks how many card decks should be in the market?
+ */
 const Market = function (noOfDecks = 1) {
     const cards = []
 
