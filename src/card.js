@@ -35,5 +35,5 @@ module.exports.GetTriangle = (props = {}) => (new Card({ ...props, ...{ shape: S
 module.exports.GetCircle = (props = {}) => (new Card({ ...props, ...{ shape: Shapes.Circle }}))
 module.exports.GetSquare = (props = {}) => (new Card({ ...props, ...{ shape: Shapes.Square }}))
 module.exports.GetStar = (props = {}) => (new Card({ ...props, ...{ shape: Shapes.Star }}))
-module.exports.GetWhot = (props = {}) => (new Card({ ...props, ...{ shape: Shapes.Whot }}))
+module.exports.GetWhot = (props = {}) => (new Card({ ...props, ...{ shape: Shapes.Whot, value: 20 }}))
 module.exports.GetCross = (props = {}) => (new Card({ ...props, ...{ shape: Shapes.Cross }}))

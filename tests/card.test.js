@@ -19,12 +19,35 @@ describe('Card', () => {
         assert.equal(circle.score, 1)
     })
     
-    describe('star', () => {
+    describe('Star', () => {
         it('should have a double score', () => {
             const star = GetStar({
                 value: 1
             })
             assert.equal(star.score, 2)
+        })
+    })
+
+    describe('.matches()', () => {
+        it('should be false if cards have different shapes', () => {
+            assert.isFalse((GetSquare({ value: 1 }).matches(GetCircle({ value: 8 }))))
+        })
+
+        it('should be true if cards have different shapes but same value', () => {
+            assert.isTrue((GetSquare({ value: 1 }).matches(GetCircle({ value: 1 }))))
+        })
+
+        it('should be true if cards have same shape but different values', () => {
+            assert.isTrue((GetCircle({ value: 1 }).matches(GetCircle({ value: 8 }))))
+        })
+        
+        it('should be true if cards have same shape and same values', () => {
+            assert.isTrue((GetCircle({ value: 1 }).matches(GetCircle({ value: 1 }))))
+        })
+
+        it('should be true if either card is whot', () => {
+            assert.isTrue((GetCircle({ value: 1 }).matches(GetWhot({ }))))
+            assert.isTrue((GetWhot({ }).matches(GetSquare({ value: 2 }))))
         })
     })
 })
