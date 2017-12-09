@@ -59,6 +59,7 @@ const Player = function (props) {
         if (!Array.isArray(marketCards)) throw new InvalidArgumentTypeError('marketCards', Array)
         if (props.emitter) props.emitter.emit('player:market', this, marketCards)
         this.add(marketCards)
+        this.toPick = 0
     }
 
     this.play = (index) => {
