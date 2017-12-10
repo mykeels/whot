@@ -1,9 +1,13 @@
 const Shapes = require("./shapes")
 const createError = require('./errors')
 const { createTypeError } = require('./errors')
+const { eventify } = require('./events')
 const EventEmitter = require('events').EventEmitter
 const Card = require('./card')
+const Pile = require('./pile')
+const Market = require('./market')
 
+const util = require('util')
 const logger = require('./logger')('player.js')
 
 const CardNotFoundError = createError('CardNotFoundError')
@@ -13,17 +17,17 @@ const ExpectedToPickError = createError('ExpectedToPickError')
 const PlayValidationFailedError = createError('PlayValidationFailedError')
 const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
 
-
 /**
  * @param {Object} props
  * @param {Number} props.id identifies the player
  * @param {EventEmitter} props.emitter enables event handling and broadcasting
- * @param {Function} props.validator checks whether or not the player can play the selected card
- * @param {Function} props.market returns a Market instance
+ * @param {function():Boolean} props.validator checks whether or not the player can play the selected card
+ * @param {function():Market} props.market returns a Market instance
+ * @param {function():Pile} props.pile return a Pile instance
  * 
  * A player participates in a whot game, by holding and playing a card when it's his/her turn
  * 
- * @event player:play when a card is played
+ * @event player:play when a card is played by being added to the pile
  * @event player:market when the player goes to market
  */
 const Player = function (props) {
@@ -33,9 +37,11 @@ const Player = function (props) {
         logger.warn('No EventEmitter supplied')
         props.emitter = new EventEmitter()
     }
-    if (!props.validator) logger.warn('No Validator Function supplied')
-    else if (typeof(props.validator) !== 'function') throw InvalidArgumentError('props.validator must be a function')
     if (!props.market || typeof(props.market) !== 'function') throw InvalidArgumentError('props.market')
+    if (!props.pile) logger.warn('No Pile Function supplied')
+    else if (typeof(props.pile) !== 'function') throw InvalidArgumentError('props.pile must be a function')
+
+    const validator = (card) => props.pile().top().matches(card)
 
     /**
      * @type {Card[]}
@@ -52,6 +58,7 @@ const Player = function (props) {
         if (Array.isArray(_cards_)) {
             _cards_.forEach(card => cards.push(card))
             props.emitter.emit('player:add', _cards_)
+            this.emit('add', _cards_)
         }
         else {
             throw InvalidArgumentTypeError('_cards_', Array)
@@ -61,22 +68,24 @@ const Player = function (props) {
     this.hand = () => cards.slice(0)
 
     this.pick = () => {
-        const marketCards = props.market().pick(this.toPick)
+        const marketCards = props.market().pick(this.toPick || 1)
         if (!Array.isArray(marketCards)) throw new InvalidArgumentTypeError('marketCards', Array)
-        props.emitter.emit('player:market', this, marketCards)
         this.add(marketCards)
+        this.emit('market', marketCards)
+        props.emitter.emit('player:market', this, marketCards)
         this.toPick = 0
     }
 
     this.play = (index) => {
         if (this.turn) {
-            if (this.toPick === 0) {
-                const card = cards[index]
-                if (card) {
-                    if (!props.validator || (typeof(props.validator) === 'function' && props.validator(card))) {
+            const card = cards[index]
+            if (card) {
+                if (this.toPick === 0 || card.shape === Shapes.Whot) {
+                    if (validator(card)) {
                         cards.splice(index, 1)
-                        props.emitter.emit('player:play', this, card)
                         this.emit('play', card)
+                        props.emitter.emit('player:play', this, card)
+                        if (props.pile) props.pile().push([card])
                         if (this.empty()) {
                             props.emitter.emit('player:checkup', this)
                             this.emit('checkup')
@@ -88,18 +97,15 @@ const Player = function (props) {
                         return card
                     }
                     else if (typeof(props.validator) === 'function' && !props.validator(card)) {
-                        throw PlayValidationFailedError(card)
-                    }
-                    else {
-                        throw InvalidArgumentError('props.validator')
+                        throw PlayValidationFailedError(JSON.stringify(card))
                     }
                 }
                 else {
-                    throw CardNotFoundError(this)
+                    throw ExpectedToPickError(this)
                 }
             }
             else {
-                throw ExpectedToPickError(this)
+                throw CardNotFoundError(this)
             }
         }
         else {
@@ -110,8 +116,8 @@ const Player = function (props) {
     this.lastCard = () => (cards.length === 1)
 
     this.empty = () => (cards.length === 0)
+    
+    eventify(this)
 }
-
-Object.assign(Player.prototype, EventEmitter.prototype)
 
 module.exports = Player

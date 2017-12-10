@@ -3,6 +3,8 @@ const { createTypeError } = require('./errors')
 const EventEmitter = require('events').EventEmitter
 const Player = require('./player')
 const logger = require('./logger')('turn.js')
+const Card = require('./card')
+const Moves = require('./moves')
 
 const PlayersNotEnoughError = createError('PlayersNotEnoughError')
 const InvalidArgumentError = createError('InvalidArgumentError')
@@ -86,6 +88,7 @@ const Turn = function (props = {}) {
             const affectedPlayers = this.setToPick(1, nextPlayer.toPick + 2)
             nextPlayer.toPick = 0
             props.emitter.emit('turn:pick-two', affectedPlayers[0])
+            this.switch()
             return this
         }
         else throw InappropriateMoveError('pickTwo')
@@ -97,6 +100,7 @@ const Turn = function (props = {}) {
             const affectedPlayers = this.setToPick(1, nextPlayer.toPick + 3)
             nextPlayer.toPick = 0
             props.emitter.emit('turn:pick-three', affectedPlayers[0])
+            this.switch()
             return this
         }
         else throw InappropriateMoveError('pickThree')
@@ -120,7 +124,38 @@ const Turn = function (props = {}) {
         this.switch(isStar ? 2 : 1)
     }
 
+    this.generalMarket = () => {
+        const affectedPlayers = this.setToPick(this.count() - 1, 1)
+        props.emitter.emit('turn:general-market', affectedPlayers)
+        this.switch()
+        return affectedPlayers
+    }
+
     this.count = () => players.length
+
+    /**
+     * @param {Card} card
+     */
+    this.execute = (card) => {
+        if (card.move === Moves.GeneralMarket) {
+            this.generalMarket()
+        }
+        else if (card.move === Moves.HoldOn) {
+            this.holdon()
+        }
+        else if (card.move === Moves.PickThree) {
+            this.pickThree()
+        }
+        else if (card.move === Moves.PickTwo) {
+            this.pickTwo()
+        }
+        else if (card.move === Moves.Suspension) {
+            this.suspension()
+        }
+        else {
+            this.switch()
+        }
+    }
 }
 
 module.exports = Turn

@@ -165,7 +165,6 @@ describe('Turn', () => {
                     emitter: new EventEmitter()
                 })
                 turn.pickTwo()
-                turn.switch()
                 turn.pickTwo()
                 assert.equal(player1.toPick, 0)
                 assert.equal(player2.toPick, 0)
@@ -184,7 +183,6 @@ describe('Turn', () => {
                             emitter: new EventEmitter()
                         })
                         turn.pickTwo()
-                        turn.switch()
                         turn.pickThree()
                         assert.fail()
                     }
@@ -223,7 +221,6 @@ describe('Turn', () => {
                         emitter: new EventEmitter()
                     })
                     turn.pickThree()
-                    turn.switch()
                     turn.pickThree()
                     assert.equal(player1.toPick, 0)
                     assert.equal(player2.toPick, 0)
@@ -242,7 +239,6 @@ describe('Turn', () => {
                                 emitter: new EventEmitter()
                             })
                             turn.pickThree()
-                            turn.switch()
                             turn.pickTwo()
                             assert.fail()
                         }
