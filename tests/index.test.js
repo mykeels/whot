@@ -10,10 +10,10 @@ const logger = require('../src/logger')('index.test.js')
  * @param {Game} game
  */
 const makeRandomPlay = (player, game) => {
-    const compatibleCardIndex = player.hand().findIndex(card => card.matches(game.pile.top()))
-    if (compatibleCardIndex >= 0 && player.toPick === 0) {
+    if (player.canPlay()) {
+        const compatibleCardIndex = player.hand().findIndex(card => card.matches(game.pile.top()))
         const card = player.hand()[compatibleCardIndex]
-        //logger.log('player:', player, '\n\ntop:', game.pile.top(), '\n\ncard:', card)
+        logger.log('old:', card.render(), 'new:', game.pile.top().render())
         player.play(compatibleCardIndex)
         return card
     }
@@ -35,14 +35,10 @@ describe('Game', () => {
         })
 
         it('should work', () => {
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= 50; i++) {
                 const game = new Game({
                     noOfDecks: 1,
                     noOfPlayers: 4
-                })
-            
-                game.on('game:created', function () {
-                    logger.log('game:created', '\n\n')
                 })
             
                 makeRandomPlay(game.turn.next(), game)

@@ -72,8 +72,6 @@ const Game = function (props = {}) {
     
     deal() //send 4 cards to each player
     turn.execute(playFirstCard())
-
-    setTimeout(() => this.emit('game:created'), 100)
 }
 
 module.exports = Game

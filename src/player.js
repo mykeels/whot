@@ -116,6 +116,8 @@ const Player = function (props) {
     this.lastCard = () => (cards.length === 1)
 
     this.empty = () => (cards.length === 0)
+
+    this.canPlay = () => ((cards.findIndex(card => card.matches(props.pile().top())) >= 0) && (this.toPick === 0))
     
     eventify(this)
 }

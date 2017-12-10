@@ -24,6 +24,8 @@ const Card = function (props = {}) {
                 (this.shape === Shapes.Whot)
     }
     
+    this.render = () => `${this.shape} (${this.value})`
+    
     const self = this;
     Object.assign(this, {
         get score() {
