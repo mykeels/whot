@@ -2,6 +2,7 @@ const Shapes = require("./shapes")
 const createError = require('./errors')
 const { createTypeError } = require('./errors')
 const EventEmitter = require('events').EventEmitter
+const Card = require('./card')
 
 const logger = require('./logger')('player.js')
 
@@ -28,13 +29,17 @@ const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
 const Player = function (props) {
     if (!props) throw InvalidArgumentError('props')
     if (!props.id) throw InvalidArgumentError('props.id')
-    if (!props.emitter) logger.warn('No EventEmitter supplied')
+    if (!props.emitter) {
+        logger.warn('No EventEmitter supplied')
+        props.emitter = new EventEmitter()
+    }
     if (!props.validator) logger.warn('No Validator Function supplied')
     else if (typeof(props.validator) !== 'function') throw InvalidArgumentError('props.validator must be a function')
     if (!props.market || typeof(props.market) !== 'function') throw InvalidArgumentError('props.market')
 
-    props.emitter = props.emitter || new EventEmitter()
-
+    /**
+     * @type {Card[]}
+     */
     const cards = []
 
     this.id = props.id
@@ -46,6 +51,7 @@ const Player = function (props) {
     this.add = (_cards_ = []) => {
         if (Array.isArray(_cards_)) {
             _cards_.forEach(card => cards.push(card))
+            props.emitter.emit('player:add', _cards_)
         }
         else {
             throw InvalidArgumentTypeError('_cards_', Array)
@@ -57,7 +63,7 @@ const Player = function (props) {
     this.pick = () => {
         const marketCards = props.market().pick(this.toPick)
         if (!Array.isArray(marketCards)) throw new InvalidArgumentTypeError('marketCards', Array)
-        if (props.emitter) props.emitter.emit('player:market', this, marketCards)
+        props.emitter.emit('player:market', this, marketCards)
         this.add(marketCards)
         this.toPick = 0
     }

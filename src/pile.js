@@ -24,6 +24,9 @@ const Pile = function (props = {}) {
         props.emitter = new EventEmitter()
     }
 
+    /**
+     * @type {Card[]}
+     */
     const cards = []
 
     this.top = () => (cards[cards.length - 1] || null)

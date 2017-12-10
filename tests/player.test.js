@@ -90,7 +90,7 @@ describe('Player', () => {
         const player = new Player({ 
             id: 1, 
             validator: (card) => false,
-            emitter: {},
+            emitter: new EventEmitter(),
             market: mockMarket
         })
         describe('Count', () => {

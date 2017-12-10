@@ -25,7 +25,10 @@ const Market = function (props = {}) {
         logger.warn('props.emitter not defined')
         props.emitter = new EventEmitter()
     }
-
+    
+    /**
+     * @type {Card[]}
+     */
     let cards = []
 
     for (let i = 1; i<= props.noOfDecks; i++) {
