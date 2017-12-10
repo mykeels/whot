@@ -1,6 +1,7 @@
 const createError = require('./errors')
 const { createTypeError } = require('./errors')
 const EventEmitter = require('events').EventEmitter
+const Player = require('./player')
 
 const PlayersNotEnoughError = createError('PlayersNotEnoughError')
 const InvalidArgumentError = createError('InvalidArgumentError')
@@ -10,7 +11,7 @@ const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
 /**
  * 
  * @param {Object} props
- * @param {Object[]} props.players
+ * @param {Player[]} props.players
  * @param {EventEmitter} props.emitter 
  */
 const Turn = function (props = {}) {
