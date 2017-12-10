@@ -1,4 +1,5 @@
 const Shapes = require('./shapes')
+const { GetMove } = require('./moves')
 
 /**
  * Generate a new Card, which may be of any shape and value
@@ -6,6 +7,7 @@ const Shapes = require('./shapes')
  * @param {Object} props
  * @param {Number} props.value
  * @param {Number} props.shape
+ * @param {String} props.move
  * @param {String} props.image (optional)
  */
 
@@ -13,6 +15,7 @@ const Card = function (props = {}) {
     this.value = props.value
     this.shape = props.shape
     this.image = props.image
+    this.move = GetMove(props.value)
     
     this.matches = (card = new Card()) => {
         return (card.shape === this.shape) || 
