@@ -9,14 +9,16 @@ const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
 
 /**
  * 
- * @param {Object[]} _players_ 
+ * @param {Object} props
+ * @param {Object[]} props.players
+ * @param {EventEmitter} props.emitter 
  */
-const Turn = function (_players_) {
-    if (!Array.isArray(_players_)) {
-        throw InvalidArgumentTypeError('_players_', Array)
+const Turn = function (props = {}) {
+    if (!Array.isArray(props.players)) {
+        throw InvalidArgumentTypeError('props.players', Array)
     }
 
-    const players = _players_
+    const players = props.players
 
     if (players.length === 0) throw PlayersNotEnoughError()
     

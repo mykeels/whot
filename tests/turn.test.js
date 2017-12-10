@@ -25,9 +25,12 @@ describe('Turn', () => {
             }
         })
 
-        it('should throw PlayersNotEnoughError if _players_.length === 0', () => {
+        it('should throw PlayersNotEnoughError if props.players.length === 0', () => {
             try {
-                const turn = new Turn([])
+                const turn = new Turn({
+                    players: [],
+                    emitter: new EventEmitter()
+                })
                 assert.fail()
             }
             catch (err) {
@@ -36,20 +39,26 @@ describe('Turn', () => {
         })
 
         it('should work', () => {
-            const turn = new Turn([
-                player1,
-                player2,
-                player3
-            ])
+            const turn = new Turn({
+                players: [
+                    player1,
+                    player2,
+                    player3
+                ],
+                emitter: new EventEmitter()
+            })
         })
     })
 
     describe('.next()', () => {
-        const turn = new Turn([
-            player1,
-            player2,
-            player3
-        ])
+        const turn = new Turn({
+            players: [
+                player1,
+                player2,
+                player3
+            ],
+            emitter: new EventEmitter()
+        })
 
         it('should have a value which is equal to player1', () => {
             assert.deepEqual(turn.next(), player1)
@@ -58,21 +67,27 @@ describe('Turn', () => {
 
     describe('.switch(skip).next()', () => {
         it('should equal player2', () => {
-            const turn = new Turn([
-                player1,
-                player2,
-                player3
-            ])
+            const turn = new Turn({
+                players: [
+                    player1,
+                    player2,
+                    player3
+                ],
+                emitter: new EventEmitter()
+            })
             turn.switch()
             assert.deepEqual(turn.next(), player2)
         })
 
         it('should equal player3', () => {
-            const turn = new Turn([
-                player1,
-                player2,
-                player3
-            ])
+            const turn = new Turn({
+                players: [
+                    player1,
+                    player2,
+                    player3
+                ],
+                emitter: new EventEmitter()
+            })
             turn.switch(1)
             assert.deepEqual(turn.next(), player3)
         })
@@ -80,11 +95,14 @@ describe('Turn', () => {
 
     describe('.setToPick(n, count)', () => {
         it('should have player2.toPick === 2', () => {
-            const turn = new Turn([
-                player1,
-                player2,
-                player3
-            ])
+            const turn = new Turn({
+                players: [
+                    player1,
+                    player2,
+                    player3
+                ],
+                emitter: new EventEmitter()
+            })
             turn.setToPick(1, 2)
             assert.equal(player1.toPick, 0)
             assert.equal(player2.toPick, 2)
@@ -92,11 +110,14 @@ describe('Turn', () => {
         })
 
         it('should have && player2.toPick === 1 && player3.toPick === 1', () => {
-            const turn = new Turn([
-                player1,
-                player2,
-                player3
-            ])
+            const turn = new Turn({
+                players: [
+                    player1,
+                    player2,
+                    player3
+                ],
+                emitter: new EventEmitter()
+            })
             turn.setToPick(2, 1)
             assert.equal(player1.toPick, 0)
             assert.equal(player2.toPick, 1)
@@ -106,11 +127,14 @@ describe('Turn', () => {
 
     describe('.holdon()', () => {
         it('should make the same player the value of .next()', () => {
-            const turn = new Turn([
-                player1,
-                player2,
-                player3
-            ])
+            const turn = new Turn({
+                players: [
+                    player1,
+                    player2,
+                    player3
+                ],
+                emitter: new EventEmitter()
+            })
             turn.holdon()
             assert.deepEqual(turn.next(), player1)
         })
@@ -118,22 +142,28 @@ describe('Turn', () => {
 
     describe('.pickTwo()', () => {
         it('should have player2.toPick === 2', () => {
-            const turn = new Turn([
-                player1,
-                player2,
-                player3
-            ])
+            const turn = new Turn({
+                players: [
+                    player1,
+                    player2,
+                    player3
+                ],
+                emitter: new EventEmitter()
+            })
             turn.pickTwo()
             assert.equal(player2.toPick, 2)
         })
 
         describe('defer', () => {
             it('should have player3.toPick === 4', () => {
-                const turn = new Turn([
-                    player1,
-                    player2,
-                    player3
-                ])
+                const turn = new Turn({
+                    players: [
+                        player1,
+                        player2,
+                        player3
+                    ],
+                    emitter: new EventEmitter()
+                })
                 turn.pickTwo()
                 turn.switch()
                 turn.pickTwo()
@@ -145,11 +175,14 @@ describe('Turn', () => {
             describe('.pickTwo().switch().pickThree()', () => {
                 it('should throw InappropriateMoveError', () => {
                     try {
-                        const turn = new Turn([
-                            player1,
-                            player2,
-                            player3
-                        ])
+                        const turn = new Turn({
+                            players: [
+                                player1,
+                                player2,
+                                player3
+                            ],
+                            emitter: new EventEmitter()
+                        })
                         turn.pickTwo()
                         turn.switch()
                         turn.pickThree()
@@ -167,22 +200,28 @@ describe('Turn', () => {
 
         describe('.pickThree()', () => {
             it('should have .next().toPick === 3', () => {
-                const turn = new Turn([
-                    player1,
-                    player2,
-                    player3
-                ])
+                const turn = new Turn({
+                    players: [
+                        player1,
+                        player2,
+                        player3
+                    ],
+                    emitter: new EventEmitter()
+                })
                 turn.pickThree()
                 assert.equal(player2.toPick, 3)
             })
 
             describe('defer', () => {
                 it('should have player3.toPick === 6', () => {
-                    const turn = new Turn([
-                        player1,
-                        player2,
-                        player3
-                    ])
+                    const turn = new Turn({
+                        players: [
+                            player1,
+                            player2,
+                            player3
+                        ],
+                        emitter: new EventEmitter()
+                    })
                     turn.pickThree()
                     turn.switch()
                     turn.pickThree()
@@ -194,11 +233,14 @@ describe('Turn', () => {
                 describe('.pickThree().switch().pickTwo()', () => {
                     it('should throw InappropriateMoveError', () => {
                         try {
-                            const turn = new Turn([
-                                player1,
-                                player2,
-                                player3
-                            ])
+                            const turn = new Turn({
+                                players: [
+                                    player1,
+                                    player2,
+                                    player3
+                                ],
+                                emitter: new EventEmitter()
+                            })
                             turn.pickThree()
                             turn.switch()
                             turn.pickTwo()
@@ -215,22 +257,28 @@ describe('Turn', () => {
 
         describe('.suspension()', () => {
             it('should have .next() === player3', () => {
-                const turn = new Turn([
-                    player1,
-                    player2,
-                    player3
-                ])
+                const turn = new Turn({
+                    players: [
+                        player1,
+                        player2,
+                        player3
+                    ],
+                    emitter: new EventEmitter()
+                })
                 turn.suspension()
                 assert.deepEqual(turn.next(), player3)
             })
 
             describe('isStar = true', () => {
                 it('should have .next() === player1', () => {
-                    const turn = new Turn([
-                        player1,
-                        player2,
-                        player3
-                    ])
+                    const turn = new Turn({
+                        players: [
+                            player1,
+                            player2,
+                            player3
+                        ],
+                        emitter: new EventEmitter()
+                    })
                     turn.suspension(true)
                     assert.deepEqual(turn.next(), player1)
                 })
@@ -239,11 +287,14 @@ describe('Turn', () => {
 
         describe('.count()', () => {
             it('should be 3', () => {
-                const turn = new Turn([
-                    player1,
-                    player2,
-                    player3
-                ])
+                const turn = new Turn({
+                    players: [
+                        player1,
+                        player2,
+                        player3
+                    ],
+                    emitter: new EventEmitter()
+                })
                 assert.equal(turn.count(), 3)
             })
         })
