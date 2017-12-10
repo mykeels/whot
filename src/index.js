@@ -1,4 +1,5 @@
 const Card = require('./card')
+const { GetCircle } = require('./card')
 const Deck = require('./deck')
 const Market = require('./market')
 const Pile = require('./pile')
@@ -65,13 +66,13 @@ const Game = function (props = {}) {
     }
 
     const playFirstCard = () => {
-        const cards = market.pick(1)
+        const cards = [GetCircle({ value: 5 })] //market.pick(1)
         pile.push(cards)
         return cards[0]
     }
     
     deal() //send 4 cards to each player
-    turn.execute(playFirstCard())
+    turn.execute(playFirstCard(), true)
 }
 
 module.exports = Game

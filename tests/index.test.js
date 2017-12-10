@@ -13,12 +13,14 @@ const makeRandomPlay = (player, game) => {
     if (player.canPlay()) {
         const compatibleCardIndex = player.hand().findIndex(card => card.matches(game.pile.top()))
         const card = player.hand()[compatibleCardIndex]
-        logger.log('old:', card.render(), 'new:', game.pile.top().render())
+        logger.log(player.render(), '| old:', game.pile.top().render(), '| play:', card.render())
         player.play(compatibleCardIndex)
-        return card
+        game.turn.execute(game.pile.top())
     }
     else {
-        player.pick()
+        const marketCards = player.pick()
+        logger.warn(player.render(), '| old:', game.pile.top().render(), '| market:', marketCards.map(card => card.render()).join(', '))
+        game.turn.switch()
     }
 }
 
@@ -35,13 +37,18 @@ describe('Game', () => {
         })
 
         it('should work', () => {
-            for (let i = 1; i <= 50; i++) {
-                const game = new Game({
-                    noOfDecks: 1,
-                    noOfPlayers: 4
-                })
-            
-                makeRandomPlay(game.turn.next(), game)
+            const game = new Game({
+                noOfDecks: 1,
+                noOfPlayers: 2
+            })
+            const endGame = false
+            game.on('player:checkup', (player) => {
+                logger.error('player checkup', player)
+                endGame = true
+            })
+            logger.warn('top:', game.pile.top().render(), ' | ', game.turn.next().render())
+            for (let i = 1; i <= 15000; i++) {
+                if (!endGame) makeRandomPlay(game.turn.next(), game)
             }
         })
     })

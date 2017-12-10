@@ -1,11 +1,12 @@
 const { assert } = require('chai')
 const { GetCircle, GetSquare } = require('../src/card')
+const emitter = require('../src/events')
 const Pile = require("../src/pile")
 
 describe('Pile', () => {
     describe('.top()', () => {
         it('should be null initially', () => {
-            const pile = new Pile()
+            const pile = new Pile({ emitter })
             assert.isNull(pile.top())
         })
     })
@@ -13,7 +14,7 @@ describe('Pile', () => {
     describe('.push([...])', () => {
         it('should throw InvalidArgumentTypeError(Array)', () => {
             try {
-                const pile = new Pile()
+                const pile = new Pile({ emitter })
                 pile.push({})
                 assert.fail()
             }
@@ -25,7 +26,7 @@ describe('Pile', () => {
 
         it('should throw NoCardSuppliedError when _cards_[] is empty', () => {
             try {
-                const pile = new Pile()
+                const pile = new Pile({ emitter })
                 pile.push([])
                 assert.fail()
             }
@@ -36,7 +37,7 @@ describe('Pile', () => {
 
         it('should throw LastCardMismatchError', () => {
             try {
-                const pile = new Pile()
+                const pile = new Pile({ emitter })
                 const card = GetCircle({ value: 1 })
                 const card2 = GetSquare({ value: 2 })
                 pile.push([card])
@@ -49,7 +50,7 @@ describe('Pile', () => {
         })
 
         it('should work', () => {
-            const pile = new Pile()
+            const pile = new Pile({ emitter })
             const card = GetCircle({ value: 1 })
             pile.push([card])
             assert.deepEqual(pile.top(), card)

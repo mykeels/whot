@@ -6,6 +6,7 @@ const EventEmitter = require('events').EventEmitter
 const Card = require('./card')
 const Pile = require('./pile')
 const Market = require('./market')
+const Moves = require('./moves')
 
 const util = require('util')
 const logger = require('./logger')('player.js')
@@ -74,6 +75,7 @@ const Player = function (props) {
         this.emit('market', marketCards)
         props.emitter.emit('player:market', this, marketCards)
         this.toPick = 0
+        return marketCards
     }
 
     this.play = (index) => {
@@ -87,8 +89,13 @@ const Player = function (props) {
                         props.emitter.emit('player:play', this, card)
                         if (props.pile) props.pile().push([card])
                         if (this.empty()) {
-                            props.emitter.emit('player:checkup', this)
-                            this.emit('checkup')
+                            if (props.pile().top().move === Moves.None) {
+                                props.emitter.emit('player:checkup', this)
+                                this.emit('checkup')
+                            }
+                            else {
+                                this.pick()
+                            }
                         }
                         if (this.lastCard()) {
                             props.emitter.emit('player:last-card', this)
@@ -118,6 +125,8 @@ const Player = function (props) {
     this.empty = () => (cards.length === 0)
 
     this.canPlay = () => ((cards.findIndex(card => card.matches(props.pile().top())) >= 0) && (this.toPick === 0))
+
+    this.render = () => `id: ${this.id} count: ${cards.length} hand: [${cards.map(card => card.value).join(',')}]`
     
     eventify(this)
 }

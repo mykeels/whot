@@ -61,46 +61,45 @@ const Turn = function (props = {}) {
      * 
      * @returns affected players
      */
-    this.setToPick = (noOfPlayers, count) => {
+    this.setToPick = (noOfPlayers, count, noSwitch) => {
         if (!Number(noOfPlayers)) throw InvalidArgumentError('noOfPlayers')
         if (!Number(count)) throw InvalidArgumentError('count')
         
-        let currentPlayerIndex = players.findIndex(player => player.turn)
+        let currentPlayerIndex = noSwitch ? -1 : players.findIndex(player => player.turn)
         
         const ret = []
         for (let i = 1; i <= noOfPlayers; i++) {
             let nextPlayerIndex = ((++currentPlayerIndex) % players.length)
-            const nextPlayer = players[nextPlayerIndex]
-            nextPlayer.toPick = count
-            ret.push(nextPlayer)
+            players[nextPlayerIndex].toPick = count
+            ret.push(players[nextPlayerIndex])
         }
         return ret
     }
 
-    this.holdon = () => {
+    this.holdon = (noSwitch) => {
         props.emitter.emit('turn:holdon', skipped(this.count() - 1))
-        this.switch(this.count() - 1)
+        if (!noSwitch) this.switch(this.count() - 1)
     }
 
-    this.pickTwo = () => {
+    this.pickTwo = (noSwitch) => {
         let nextPlayer = this.next()
         if (nextPlayer.toPick === 0 || nextPlayer.toPick === 2) {
-            const affectedPlayers = this.setToPick(1, nextPlayer.toPick + 2)
-            nextPlayer.toPick = 0
+            const affectedPlayers = this.setToPick(1, nextPlayer.toPick + 2, noSwitch)
+            if (!noSwitch) nextPlayer.toPick = 0
             props.emitter.emit('turn:pick-two', affectedPlayers[0])
-            this.switch()
+            if (!noSwitch) this.switch()
             return this
         }
         else throw InappropriateMoveError('pickTwo')
     }
 
-    this.pickThree = () => {
+    this.pickThree = (noSwitch) => {
         let nextPlayer = this.next()
         if (nextPlayer.toPick === 0 || nextPlayer.toPick === 3) {
-            const affectedPlayers = this.setToPick(1, nextPlayer.toPick + 3)
-            nextPlayer.toPick = 0
+            const affectedPlayers = this.setToPick(1, nextPlayer.toPick + 3, noSwitch)
+            if (!noSwitch) nextPlayer.toPick = 0
             props.emitter.emit('turn:pick-three', affectedPlayers[0])
-            this.switch()
+            if (!noSwitch) this.switch()
             return this
         }
         else throw InappropriateMoveError('pickThree')
@@ -119,15 +118,15 @@ const Turn = function (props = {}) {
     /**
      * @param {Boolean} isStar check if the card played is a star
      */
-    this.suspension = (isStar) => {
+    this.suspension = (isStar, noSwitch) => {
         props.emitter.emit('turn:suspension', skipped(isStar ? 2 : 1))
-        this.switch(isStar ? 2 : 1)
+        if (!noSwitch) this.switch(isStar ? 2 : 1)
     }
 
-    this.generalMarket = () => {
-        const affectedPlayers = this.setToPick(this.count() - 1, 1)
+    this.generalMarket = (noSwitch) => {
+        const affectedPlayers = this.setToPick(this.count() - 1, 1, noSwitch)
         props.emitter.emit('turn:general-market', affectedPlayers)
-        this.switch()
+        if (!noSwitch) this.switch()
         return affectedPlayers
     }
 
@@ -136,24 +135,24 @@ const Turn = function (props = {}) {
     /**
      * @param {Card} card
      */
-    this.execute = (card) => {
+    this.execute = (card, noSwitch) => {
         if (card.move === Moves.GeneralMarket) {
-            this.generalMarket()
+            this.generalMarket(noSwitch)
         }
         else if (card.move === Moves.HoldOn) {
-            this.holdon()
+            this.holdon(noSwitch)
         }
         else if (card.move === Moves.PickThree) {
-            this.pickThree()
+            this.pickThree(noSwitch)
         }
         else if (card.move === Moves.PickTwo) {
-            this.pickTwo()
+            this.pickTwo(noSwitch)
         }
         else if (card.move === Moves.Suspension) {
-            this.suspension()
+            this.suspension(noSwitch)
         }
         else {
-            this.switch()
+            if (!noSwitch) this.switch()
         }
     }
 }
