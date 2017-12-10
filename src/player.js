@@ -1,4 +1,5 @@
 const Shapes = require("./shapes")
+const { renderShape } = require('./shapes')
 const createError = require('./errors')
 const { createTypeError } = require('./errors')
 const { eventify } = require('./events')
@@ -126,7 +127,7 @@ const Player = function (props) {
 
     this.canPlay = () => ((cards.findIndex(card => card.matches(props.pile().top())) >= 0) && (this.toPick === 0))
 
-    this.render = () => `id: ${this.id} count: ${cards.length} hand: [${cards.map(card => card.value).join(',')}]`
+    this.render = () => `id: ${this.id} count: ${cards.length} hand: [${cards.map(card => card.value + renderShape(card.shape)).join(',')}]`
     
     eventify(this)
 }

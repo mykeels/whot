@@ -76,7 +76,8 @@ describe('Player', () => {
                 id: 1, 
                 validator: (card) => true,
                 emitter: {},
-                market: mockMarket
+                market: mockMarket,
+                pile: mockPile
             })
         })
     })

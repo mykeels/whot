@@ -13,13 +13,13 @@ const makeRandomPlay = (player, game) => {
     if (player.canPlay()) {
         const compatibleCardIndex = player.hand().findIndex(card => card.matches(game.pile.top()))
         const card = player.hand()[compatibleCardIndex]
-        logger.log(player.render(), '| old:', game.pile.top().render(), '| play:', card.render())
+        //logger.log(player.render(), '| old:', game.pile.top().render(), '| play:', card.render())
         player.play(compatibleCardIndex)
         game.turn.execute(game.pile.top())
     }
     else {
         const marketCards = player.pick()
-        logger.warn(player.render(), '| old:', game.pile.top().render(), '| market:', marketCards.map(card => card.render()).join(', '))
+        //logger.warn(player.render(), '| old:', game.pile.top().render(), '| market:', marketCards.map(card => card.render()).join(', '))
         game.turn.switch()
     }
 }
@@ -38,16 +38,18 @@ describe('Game', () => {
 
         it('should work', () => {
             const game = new Game({
-                noOfDecks: 1,
-                noOfPlayers: 2
+                noOfDecks: 2,
+                noOfPlayers: 4
             })
-            const endGame = false
-            game.on('player:checkup', (player) => {
-                logger.error('player checkup', player)
-                endGame = true
+            let endGame = false
+            game.emitter.on('player:play', (player, card) => {
+                logger.log(player.render(), '| old:', game.pile.top().render(), '| play:', card.render())
             })
-            logger.warn('top:', game.pile.top().render(), ' | ', game.turn.next().render())
-            for (let i = 1; i <= 15000; i++) {
+            game.emitter.on('player:market', (player, marketCards) => {
+                logger.warn(player.render(), '| old:', game.pile.top().render(), '| market:', marketCards.map(card => card.render()).join(', '))
+            })
+            logger.warn('Game Start: top:', game.pile.top().render(), ' | ', game.turn.next().render())
+            for (let i = 1; i <= 50; i++) {
                 if (!endGame) makeRandomPlay(game.turn.next(), game)
             }
         })
