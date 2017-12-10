@@ -2,6 +2,7 @@ const createError = require('./errors')
 const { createTypeError } = require('./errors')
 const EventEmitter = require('events').EventEmitter
 const Player = require('./player')
+const logger = require('./logger')('turn.js')
 
 const PlayersNotEnoughError = createError('PlayersNotEnoughError')
 const InvalidArgumentError = createError('InvalidArgumentError')
@@ -13,10 +14,20 @@ const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
  * @param {Object} props
  * @param {Player[]} props.players
  * @param {EventEmitter} props.emitter 
+ * 
+ * @event turn:switch
+ * @event turn:holdon
+ * @event turn:pick-two
+ * @event turn:pick-three
+ * @event turn:suspension
  */
 const Turn = function (props = {}) {
     if (!Array.isArray(props.players)) {
         throw InvalidArgumentTypeError('props.players', Array)
+    }
+    if (!props.emitter) {
+        logger.warn('props.emitter not undefined')
+        props.emitter = new EventEmitter()
     }
 
     const players = props.players
@@ -38,12 +49,15 @@ const Turn = function (props = {}) {
         const currentPlayer = this.next()
         currentPlayer.turn = false
         nextPlayer.turn = true
+        props.emitter.emit('turn:switch', skip, nextPlayer)
         return this
     }
 
     /**
      * @param {Number} noOfPlayers how many players are to pick
      * @param {Number} count how many cards is each player to pick
+     * 
+     * @returns affected players
      */
     this.setToPick = (noOfPlayers, count) => {
         if (!Number(noOfPlayers)) throw InvalidArgumentError('noOfPlayers')
@@ -51,20 +65,27 @@ const Turn = function (props = {}) {
         
         let currentPlayerIndex = players.findIndex(player => player.turn)
         
+        const ret = []
         for (let i = 1; i <= noOfPlayers; i++) {
             let nextPlayerIndex = ((++currentPlayerIndex) % players.length)
             const nextPlayer = players[nextPlayerIndex]
             nextPlayer.toPick = count
+            ret.push(nextPlayer)
         }
+        return ret
     }
 
-    this.holdon = () => this.switch(this.count() - 1)
+    this.holdon = () => {
+        props.emitter.emit('turn:holdon', skipped(this.count() - 1))
+        this.switch(this.count() - 1)
+    }
 
     this.pickTwo = () => {
         let nextPlayer = this.next()
         if (nextPlayer.toPick === 0 || nextPlayer.toPick === 2) {
-            this.setToPick(1, nextPlayer.toPick + 2)
+            const affectedPlayers = this.setToPick(1, nextPlayer.toPick + 2)
             nextPlayer.toPick = 0
+            props.emitter.emit('turn:pick-two', affectedPlayers[0])
             return this
         }
         else throw InappropriateMoveError('pickTwo')
@@ -73,17 +94,31 @@ const Turn = function (props = {}) {
     this.pickThree = () => {
         let nextPlayer = this.next()
         if (nextPlayer.toPick === 0 || nextPlayer.toPick === 3) {
-            this.setToPick(1, nextPlayer.toPick + 3)
+            const affectedPlayers = this.setToPick(1, nextPlayer.toPick + 3)
             nextPlayer.toPick = 0
+            props.emitter.emit('turn:pick-three', affectedPlayers[0])
             return this
         }
         else throw InappropriateMoveError('pickThree')
     }
 
+    const skipped = (no) => {
+        const ret = []
+        let currentPlayerIndex = players.findIndex(player => player.turn)
+        for (let i = 1; i <= no; i++) {
+            let nextPlayerIndex = ((++currentPlayerIndex) % players.length)
+            ret.push(players[nextPlayerIndex])
+        }
+        return ret
+    }
+
     /**
      * @param {Boolean} isStar check if the card played is a star
      */
-    this.suspension = (isStar) => this.switch(isStar ? 2 : 1)
+    this.suspension = (isStar) => {
+        props.emitter.emit('turn:suspension', skipped(isStar ? 2 : 1))
+        this.switch(isStar ? 2 : 1)
+    }
 
     this.count = () => players.length
 }
