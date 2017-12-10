@@ -32,7 +32,7 @@ const Market = function (props = {}) {
     let cards = []
 
     for (let i = 1; i<= props.noOfDecks; i++) {
-        const deck = new Deck()
+        const deck = new Deck({ emitter: props.emitter })
         deck.shuffle().forEach(card => cards.push(card))
     }
 

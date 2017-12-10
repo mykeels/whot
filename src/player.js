@@ -76,6 +76,15 @@ const Player = function (props) {
                     if (!props.validator || (typeof(props.validator) === 'function' && props.validator(card))) {
                         cards.splice(index, 1)
                         props.emitter.emit('player:play', this, card)
+                        this.emit('play', card)
+                        if (this.empty()) {
+                            props.emitter.emit('player:checkup', this)
+                            this.emit('checkup')
+                        }
+                        if (this.lastCard()) {
+                            props.emitter.emit('player:last-card', this)
+                            this.emit('last-card')
+                        }
                         return card
                     }
                     else if (typeof(props.validator) === 'function' && !props.validator(card)) {
@@ -97,6 +106,12 @@ const Player = function (props) {
             throw OutOfTurnError(this)
         }
     }
+
+    this.lastCard = () => (cards.length === 1)
+
+    this.empty = () => (cards.length === 0)
 }
+
+Object.assign(Player.prototype, EventEmitter.prototype)
 
 module.exports = Player
