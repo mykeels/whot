@@ -4,13 +4,26 @@ const Shapes = require("../src/shapes")
 const createError = require('./errors')
 const { createTypeError } = require('./errors')
 const EventEmitter = require('events').EventEmitter
-const logger = require('./logger')('player.js')
+const logger = require('./logger')('pile.js')
 
 const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
 const LastCardMismatchError = createError('LastCardMismatchError') //to block attempts to play a card that doesn't match the top card in the pile
 const NoCardSuppliedError = createError('NoCardSuppliedError') //to block attempts to play no cards
 
-const Pile = function () {
+/**
+ * 
+ * @param {Object} props 
+ * @param {EventEmitter} props.emitter
+ * 
+ * @event pile:push
+ * @event pile:reset
+ */
+const Pile = function (props = {}) {
+    if (!props.emitter) {
+        logger.warn('props.emitter not defined')
+        props.emitter = new EventEmitter()
+    }
+
     const cards = []
 
     this.top = () => (cards[cards.length - 1] || null)
@@ -21,6 +34,7 @@ const Pile = function () {
                 const lastCard = _cards_[_cards_.length - 1]
                 if (!this.top() || this.top().matches(lastCard)) {
                     _cards_.forEach(card => cards.push(card))
+                    props.emitter.emit('pile:push', _cards_)
                 }
                 else {
                     throw LastCardMismatchError({ pile: this.top(), play: lastCard })
@@ -36,6 +50,7 @@ const Pile = function () {
     }
 
     this.reset = () => {
+        props.emitter.emit('pile:reset', this.top())
         return cards.splice(0, cards.length - 1)
     }
 }
