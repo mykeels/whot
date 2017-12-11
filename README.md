@@ -25,7 +25,9 @@ const game = new Game({
 })
 ```
 
-To make a play:
+You can subscribe to the [events](./docs/events.md) that the [`Game`](./docs/game.md) instance offers via its `emitter` property.
+
+To play a card:
 
 ```js
 const player = game.turn.next()
@@ -43,8 +45,6 @@ else {
     game.turn.switch()
 }
 ```
-
-You can subscribe to the [events](./docs/events.md) that the [`Game`](./docs/game.md) instance offers via its `emitter` property.
 
 Read more in [docs](./docs)
 
