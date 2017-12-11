@@ -1,4 +1,4 @@
-# Whot! (IN DEVELOPMENT)
+# Whot!
 
 Whot! is the national card game of Nigeria. It is played by young and old, and has come to be associated with fond memories, by me and a lot of people I know. [Read More](https://www.pagat.com/com/whot.html)
 
