@@ -6,7 +6,9 @@ This is a JS Library that will facilitate the Nigerian Whot! Game Play.
 
 ## Why
 
-I am starting this project because I know it will be challenging (I look forward to it), and because I hope someone else builds a beautiful UI/UX around it (cos I can't), so I can play this game with my friends and family from my phone and laptop, and experience the same amount of fun I did playing it as a child.
+I have started this project because I hope someone else builds a beautiful UI/UX around it (cos I can't).
+
+I also want to play this game with my friends and family from my phone and laptop, and experience the same amount of fun I did playing it as a child.
 
 ## How
 
@@ -42,9 +44,9 @@ else {
 }
 ```
 
-You can subscribe to the events that the [`Game`](./docs/game.md) instance offers via its `emitter` property. [Read More](./docs/events.md)
+You can subscribe to the [events](./docs/events.md) that the [`Game`](./docs/game.md) instance offers via its `emitter` property.
 
-See more in the [docs](./docs)
+Read more in [docs](./docs)
 
 ### Testing
 
@@ -58,4 +60,4 @@ It'll be me, unless you can convince me you are interested
 
 ## When
 
-ASAP!
+On-going! Now on version 1.0.0 😀
