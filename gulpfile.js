@@ -6,14 +6,15 @@ const streamify = require('gulp-streamify')
 const rename = require('gulp-rename')
 
 const buildScripts = () => {
-    browserify('./src/index.js', {
-        standalone: 'Game'
-    })
-        .bundle()
-        .pipe(source('index.js'))
-        .pipe(rename('index.min.js'))
-        .pipe(streamify(uglify()))
-        .pipe(gulp.dest('./dist/'))
+    const getSourceScript = () => browserify('./src/index.js', { standalone: 'Game' }).bundle().pipe(source('index.js'))
+
+    const transformScript = (source) => source.pipe(rename('index.min.js')).pipe(streamify(uglify()))
+
+    const setDestination = (source) => source.pipe(gulp.dest('./dist/'))
+
+    setDestination(transformScript(getSourceScript()))
+
+    setDestination(getSourceScript())
 }
 
 gulp.task('build', buildScripts)
