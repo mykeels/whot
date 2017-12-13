@@ -1292,7 +1292,6 @@ const emitter = require('./events')
 const createError = require('./errors')
 const { createTypeError } = require('./errors')
 const logger = require('./logger')('index.js')
-const { eventify } = require('./events')
 // do you have photoshop?
 
 const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
@@ -1310,8 +1309,6 @@ const Game = function (props = {}) {
     
     if (!Number(props.noOfDecks)) throw InvalidArgumentTypeError('props.noOfDecks')
     if (!Number(props.noOfPlayers)) throw InvalidArgumentTypeError('props.noOfPlayers')
-    
-    eventify(this)
 
     const pile = new Pile({ emitter })
     
