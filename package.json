@@ -1,6 +1,6 @@
 {
   "name": "whot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Game API for the Nigerian Whot Card Game",
   "main": "./src/index.js",
   "scripts": {

@@ -36,7 +36,6 @@ if (player.canPlay()) {
     /** pick a random card from the player's hand */
     const compatibleCardIndex = player.hand()
                                 .findIndex(card => card.matches(game.pile.top()))
-    const card = player.hand()[compatibleCardIndex]
     player.play(compatibleCardIndex)
     game.turn.execute(game.pile.top())
 }
@@ -60,4 +59,4 @@ It'll be me, unless you can convince me you are interested
 
 ## When
 
-On-going! Now on version 1.0.0 😀
+On-going! Now on version 1.0.1 😀
