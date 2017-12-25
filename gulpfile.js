@@ -20,5 +20,5 @@ const buildScripts = () => {
 gulp.task('build', buildScripts)
 
 gulp.task('watch', () => {
-    gulp.watch('./src/*.js', buildScripts)
+    return gulp.watch('./src/**/*.js', ['build'])
 })

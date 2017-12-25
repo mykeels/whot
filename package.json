@@ -1,8 +1,8 @@
 {
   "name": "whot",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Game API for the Nigerian Whot Card Game",
-  "main": "./src/index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec --watch --recursive ./tests",
     "build": "gulp build",
