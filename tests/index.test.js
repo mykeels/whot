@@ -12,14 +12,11 @@ const logger = require('../src/logger')('index.test.js')
 const makeRandomPlay = (player, game) => {
     if (player.canPlay()) {
         const compatibleCardIndex = player.hand().findIndex(card => card.matches(game.pile.top()))
-        const card = player.hand()[compatibleCardIndex]
-        //logger.log(player.render(), '| old:', game.pile.top().render(), '| play:', card.render())
         player.play(compatibleCardIndex)
         game.turn.execute(game.pile.top())
     }
     else {
         const marketCards = player.pick()
-        //logger.warn(player.render(), '| old:', game.pile.top().render(), '| market:', marketCards.map(card => card.render()).join(', '))
         game.turn.switch()
     }
 }
