@@ -46,8 +46,8 @@ describe('Card', () => {
         })
 
         it('should be true if either card is whot', () => {
-            assert.isTrue((GetCircle({ value: 1 }).matches(GetWhot({ }))))
-            assert.isTrue((GetWhot({ }).matches(GetSquare({ value: 2 }))))
+            assert.isTrue((GetCircle({ value: 1 }).matches(GetWhot({ iNeed: Shapes.Circle }))))
+            assert.isTrue((GetWhot({ iNeed: Shapes.Square }).matches(GetSquare({ value: 2 }))))
         })
     })
 })

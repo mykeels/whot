@@ -18,6 +18,7 @@ const InvalidArgumentError = createError('InvalidArgumentError')
 const ExpectedToPickError = createError('ExpectedToPickError')
 const PlayValidationFailedError = createError('PlayValidationFailedError')
 const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
+const CardNeededUndefinedError = createTypeError('CardNeededUndefinedError')
 
 /**
  * @param {Object} props
@@ -79,7 +80,11 @@ const Player = function (props) {
         return marketCards
     }
 
-    this.play = (index) => {
+    /**
+     * @param {Number} index position of card in player.hand() to play
+     * @param {Number} iNeed shape that Whot card takes for (i need)
+     */
+    this.play = (index, iNeed) => {
         if (this.turn) {
             const card = cards[index]
             if (card) {
@@ -88,7 +93,13 @@ const Player = function (props) {
                         cards.splice(index, 1)
                         this.emit('play', card)
                         props.emitter.emit('player:play', this, card)
-                        if (props.pile) props.pile().push([card])
+                        if (props.pile) {
+                            if (card.shape === Shapes.Whot) {
+                                if (!iNeed) throw CardNeededUndefinedError()
+                                else card.iNeed = iNeed
+                            }
+                            props.pile().push([card])
+                        }
                         if (this.empty()) {
                             if (props.pile().top().move === Moves.None) {
                                 props.emitter.emit('player:checkup', this)

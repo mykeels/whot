@@ -9,13 +9,11 @@ const emitter = require('./events')
 const createError = require('./errors')
 const { createTypeError } = require('./errors')
 const logger = require('./logger')('index.js')
-// do you have photoshop?
 
 const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
 
 /**
  * @constructor
- * @augments EventEmitter
  * 
  * @param {Object} props
  * @param {Number} props.noOfDecks
@@ -40,7 +38,6 @@ const Game = function (props = {}) {
             market: () => market,
             pile: () => pile
         })
-        // player.on('market', (cards) => logger.log(`player ${player.id}:`, '(market)', cards.length))
         players.push(player)
     }
 

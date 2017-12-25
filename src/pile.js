@@ -36,6 +36,7 @@ const Pile = function (props = {}) {
             if (_cards_.length > 0) {
                 const lastCard = _cards_[_cards_.length - 1]
                 if (!this.top() || this.top().matches(lastCard)) {
+                    this.top() && this.top().reset() //reset card to original config (e.g. set iNeed to null)
                     _cards_.forEach(card => cards.push(card))
                     props.emitter.emit('pile:push', _cards_)
                 }

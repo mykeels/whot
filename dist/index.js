@@ -1129,15 +1129,20 @@ const Card = function (props = {}) {
     this.shape = props.shape
     this.image = props.image
     this.move = GetMove(props.value)
+    this.iNeed = props.iNeed
     
     this.matches = (card = new Card()) => {
         return (card.shape === this.shape) || 
                 (card.value === this.value) ||
-                (card.shape === Shapes.Whot) ||
-                (this.shape === Shapes.Whot)
+                (this.shape === Shapes.Whot && this.iNeed && this.iNeed === card.shape) ||
+                (card.shape === Shapes.Whot && card.iNeed && card.iNeed === this.shape)
     }
     
     this.render = () => `${this.shape} (${this.value})`
+
+    this.reset = () => {
+        this.iNeed = null
+    }
     
     const self = this;
     Object.assign(this, {
@@ -1292,13 +1297,11 @@ const emitter = require('./events')
 const createError = require('./errors')
 const { createTypeError } = require('./errors')
 const logger = require('./logger')('index.js')
-// do you have photoshop?
 
 const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
 
 /**
  * @constructor
- * @augments EventEmitter
  * 
  * @param {Object} props
  * @param {Number} props.noOfDecks
@@ -1323,7 +1326,6 @@ const Game = function (props = {}) {
             market: () => market,
             pile: () => pile
         })
-        // player.on('market', (cards) => logger.log(`player ${player.id}:`, '(market)', cards.length))
         players.push(player)
     }
 
@@ -1518,6 +1520,7 @@ const Pile = function (props = {}) {
             if (_cards_.length > 0) {
                 const lastCard = _cards_[_cards_.length - 1]
                 if (!this.top() || this.top().matches(lastCard)) {
+                    this.top() && this.top().reset() //reset card to original config (e.g. set iNeed to null)
                     _cards_.forEach(card => cards.push(card))
                     props.emitter.emit('pile:push', _cards_)
                 }
@@ -1562,6 +1565,7 @@ const InvalidArgumentError = createError('InvalidArgumentError')
 const ExpectedToPickError = createError('ExpectedToPickError')
 const PlayValidationFailedError = createError('PlayValidationFailedError')
 const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
+const CardNeededUndefinedError = createTypeError('CardNeededUndefinedError')
 
 /**
  * @param {Object} props
@@ -1623,7 +1627,11 @@ const Player = function (props) {
         return marketCards
     }
 
-    this.play = (index) => {
+    /**
+     * @param {Number} index position of card in player.hand() to play
+     * @param {Number} iNeed shape that Whot card takes for (i need)
+     */
+    this.play = (index, iNeed) => {
         if (this.turn) {
             const card = cards[index]
             if (card) {
@@ -1632,7 +1640,13 @@ const Player = function (props) {
                         cards.splice(index, 1)
                         this.emit('play', card)
                         props.emitter.emit('player:play', this, card)
-                        if (props.pile) props.pile().push([card])
+                        if (props.pile) {
+                            if (card.shape === Shapes.Whot) {
+                                if (!iNeed) throw CardNeededUndefinedError()
+                                else card.iNeed = iNeed
+                            }
+                            props.pile().push([card])
+                        }
                         if (this.empty()) {
                             if (props.pile().top().move === Moves.None) {
                                 props.emitter.emit('player:checkup', this)

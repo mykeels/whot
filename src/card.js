@@ -16,15 +16,20 @@ const Card = function (props = {}) {
     this.shape = props.shape
     this.image = props.image
     this.move = GetMove(props.value)
+    this.iNeed = props.iNeed
     
     this.matches = (card = new Card()) => {
         return (card.shape === this.shape) || 
                 (card.value === this.value) ||
-                (card.shape === Shapes.Whot) ||
-                (this.shape === Shapes.Whot)
+                (this.shape === Shapes.Whot && this.iNeed && this.iNeed === card.shape) ||
+                (card.shape === Shapes.Whot && card.iNeed && card.iNeed === this.shape)
     }
     
     this.render = () => `${this.shape} (${this.value})`
+
+    this.reset = () => {
+        this.iNeed = null
+    }
     
     const self = this;
     Object.assign(this, {
