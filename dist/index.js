@@ -1319,6 +1319,9 @@ const Game = function (props = {}) {
 
     const players = []
 
+    /**
+     * create and load players
+     */
     for(let i = 1; i <= props.noOfPlayers; i++) {
         const player = new Player({
             id: i,
@@ -1329,6 +1332,9 @@ const Game = function (props = {}) {
         players.push(player)
     }
 
+    /**
+     * create Turn instance to manage player turns
+     */
     const turn = new Turn({
         players,
         emitter
@@ -1339,6 +1345,9 @@ const Game = function (props = {}) {
     this.pile = pile
     this.emitter = emitter
 
+    /**
+     * distribute 4 cards to each player one by one
+     */
     const deal = () => {
         for (let i = 1; i <= 4; i++) {
             players.forEach(player => {
@@ -1348,7 +1357,7 @@ const Game = function (props = {}) {
     }
 
     const playFirstCard = () => {
-        const cards = [GetCircle({ value: 5 })] //market.pick(1)
+        const cards = market.pick(1)
         pile.push(cards)
         return cards[0]
     }
