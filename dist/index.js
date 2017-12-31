@@ -1773,6 +1773,14 @@ const Turn = function (props = {}) {
     this.next = () => players.find(player => player.turn)
 
     /**
+     * @param {function():Number} fn
+     */
+    this.all = (fn) => {
+        if (fn && typeof(fn) === 'function') players.forEach(fn)
+        return players.length
+    }
+
+    /**
      * @param {Number} skip ignore this number of players
      */
     this.switch = (skip = 0) => {
