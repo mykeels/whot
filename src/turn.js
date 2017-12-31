@@ -42,6 +42,11 @@ const Turn = function (props = {}) {
 
     this.next = () => players.find(player => player.turn)
 
+    this.all = (fn) => {
+        if (fn && typeof(fn) === 'function') players.forEach(fn)
+        return players.length
+    }
+
     /**
      * @param {Number} skip ignore this number of players
      */
