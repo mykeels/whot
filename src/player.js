@@ -89,15 +89,15 @@ const Player = function (props) {
             const card = cards[index]
             if (card) {
                 if (this.toPick === 0 || card.shape === Shapes.Whot) {
+                    if (card.shape === Shapes.Whot) {
+                        if (!iNeed) throw CardNeededUndefinedError()
+                        else card.iNeed = iNeed
+                    }
                     if (validator(card)) {
                         cards.splice(index, 1)
                         this.emit('play', card)
                         props.emitter.emit('player:play', this, card)
                         if (props.pile) {
-                            if (card.shape === Shapes.Whot) {
-                                if (!iNeed) throw CardNeededUndefinedError()
-                                else card.iNeed = iNeed
-                            }
                             props.pile().push([card])
                         }
                         if (this.empty()) {
@@ -115,7 +115,7 @@ const Player = function (props) {
                         }
                         return card
                     }
-                    else if (typeof(props.validator) === 'function' && !props.validator(card)) {
+                    else {
                         throw PlayValidationFailedError(JSON.stringify(card))
                     }
                 }
