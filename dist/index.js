@@ -1135,7 +1135,7 @@ const Card = function (props = {}) {
         return (card.shape === this.shape) || 
                 (card.value === this.value) ||
                 (this.shape === Shapes.Whot && this.iNeed && this.iNeed === card.shape) ||
-                (card.shape === Shapes.Whot && card.iNeed && card.iNeed === this.shape)
+                (card.shape === Shapes.Whot)
     }
     
     this.render = () => `${this.shape} (${this.value})`

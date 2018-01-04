@@ -1,6 +1,7 @@
 const { assert } = require('chai')
 const Player = require('../src/player')
 const Market = require('../src/market')
+const Shapes = require('../src/shapes')
 const Game = require('../src')
 const logger = require('../src/logger')('index.test.js')
 
@@ -11,8 +12,14 @@ const logger = require('../src/logger')('index.test.js')
  */
 const makeRandomPlay = (player, game) => {
     if (player.canPlay()) {
-        const compatibleCardIndex = player.hand().findIndex(card => card.matches(game.pile.top()))
-        player.play(compatibleCardIndex)
+        const compatibles = player.hand().filter(card => card.matches(game.pile.top()))
+        const compatibleCardIndex = player.hand().indexOf(compatibles[Math.floor(Math.random() * compatibles.length)])
+        let iNeed = null
+        if (player.hand()[compatibleCardIndex].shape === Shapes.Whot) {
+            const eligibleCards = player.hand().filter(card => card.shape != Shapes.Whot)
+            iNeed = (eligibleCards[Math.floor(Math.random() * eligibleCards.length)] || {}).shape || Shapes.Circle
+        }
+        player.play(compatibleCardIndex, iNeed)
         game.turn.execute(game.pile.top())
     }
     else {
