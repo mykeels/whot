@@ -1600,6 +1600,10 @@ const Player = function (props) {
     if (!props.pile) logger.warn('No Pile Function supplied')
     else if (typeof(props.pile) !== 'function') throw InvalidArgumentError('props.pile must be a function')
 
+    /**
+     * 
+     * @param {Card} card 
+     */
     const validator = (card) => props.pile().top().matches(card)
 
     /**
@@ -1613,6 +1617,9 @@ const Player = function (props) {
 
     this.toPick = 0 //user is expected to pick this number of cards from the market
 
+    /**
+     * @param {Card[]} _cards_
+     */
     this.add = (_cards_ = []) => {
         if (Array.isArray(_cards_)) {
             _cards_.forEach(card => cards.push(card))
@@ -1624,8 +1631,14 @@ const Player = function (props) {
         }
     }
 
+    /**
+     * @return {Card[]}
+     */
     this.hand = () => cards.slice(0)
 
+    /**
+     * @return {Card[]}
+     */
     this.pick = () => {
         const marketCards = props.market().pick(this.toPick || 1)
         if (!Array.isArray(marketCards)) throw new InvalidArgumentTypeError('marketCards', Array)
