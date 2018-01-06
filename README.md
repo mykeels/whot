@@ -59,4 +59,4 @@ It'll be me, unless you can convince me you are interested
 
 ## When
 
-On-going! Now on version 1.0.5 🙌
+On-going! Now on version 1.0.6 🙌
