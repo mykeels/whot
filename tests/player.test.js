@@ -2,6 +2,7 @@ const { assert } = require('chai')
 const Player = require('../src/player')
 const Pile = require('../src/pile')
 const Market = require('../src/market')
+const Moves = require('../src/moves')
 const { GetCircle, GetSquare } = require('../src/card')
 const EventEmitter = require('events').EventEmitter
 
@@ -112,6 +113,46 @@ describe('Player', () => {
             it('should add expected number of cards if supplied', () => {
                 player.add([{}, {}, {}])
                 assert.equal(player.hand().length, 3)
+            })
+        })
+
+        describe('Move', () => {
+            it('can match PickThree move', () => {
+                const player = new Player({ 
+                    id: 1, 
+                    emitter: new EventEmitter(),
+                    market: mockMarket,
+                    pile: () => ({
+                        top: () => ({ move: Moves.PickThree })
+                    })
+                })
+
+                player.add([
+                    { move: null },
+                    { move: null },
+                    { move: Moves.PickThree },
+                ])
+
+                assert.isTrue(player.canMatchMove())
+            })
+
+            it('can NOT match move', () => {
+                const player = new Player({ 
+                    id: 1, 
+                    emitter: new EventEmitter(),
+                    market: mockMarket,
+                    pile: () => ({
+                        top: () => ({ move: Moves.PickThree })
+                    })
+                })
+
+                player.add([
+                    { move: null },
+                    { move: null },
+                    { move: null },
+                ])
+
+                assert.isFalse(player.canMatchMove())
             })
         })
 

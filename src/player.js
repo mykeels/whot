@@ -138,6 +138,8 @@ const Player = function (props) {
 
     this.canPlay = () => ((cards.findIndex(card => card.matches(props.pile().top())) >= 0) && (this.toPick === 0))
 
+    this.canMatchMove = (move) => (cards.findIndex(card => card.move === (move || props.pile().top().move)) >= 0)
+
     this.render = () => `id: ${this.id} count: ${cards.length} hand: [${cards.map(card => card.value + renderShape(card.shape)).join(',')}]`
     
     eventify(this)
