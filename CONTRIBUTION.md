@@ -25,3 +25,9 @@ Here's what we'd like to get done:
   - [ ] Should have multi-player
   - [ ] Should communicate with HTTP Server
   - [ ] Should be responsive for phones, tablets and PCs
+
+- [ ] Have a Whot Bot app for testing the HTTP Server. See [Example](https://github.com/mykeels/whot-server#test-mock-script)
+  - [ ] Should use a Web Sockets client
+  - [ ] Should have difficulty levels e.g.
+    - [ ] Dumb (Hard-coded)
+    - [ ] Hard (Ermm, Machine Learning?)
