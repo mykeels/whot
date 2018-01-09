@@ -55,7 +55,7 @@ Read more in [docs](./docs)
 
 ## Who
 
-It'll be me, unless you can convince me you are interested
+If you're interested, see the [Contribution Guide](./CONTRIBUTION.md).
 
 ## When
 
