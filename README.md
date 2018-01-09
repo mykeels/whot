@@ -60,3 +60,8 @@ It'll be me, unless you can convince me you are interested
 ## When
 
 On-going! Now on version 1.0.6 🙌
+
+## Related Projects
+
+- [HTTP Server](https://github.com/mykeels/whot-server) by @mykeels
+- [Web App](https://github.com/CodeByOmar/whot-app) by @CodeByOmar
