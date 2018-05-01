@@ -270,6 +270,29 @@ describe('Player', () => {
                     assert.equal(err.name, 'PlayValidationFailedError')
                 }
             })
+            
+            it('should throw ExpectedToPickError', () => {
+                try {
+                    let somePlayer = new Player({ 
+                        id: 1, 
+                        validator: (card) => true,
+                        emitter: new EventEmitter(),
+                        market: mockMarket,
+                        pile: mockPile
+                    })
+                    const card1 = GetCircle({ value: 2 })
+                    const card2 = GetCircle({ value: 6 })
+                    somePlayer.turn = true
+                    somePlayer.add([card1, card2])
+                    somePlayer.play(0)
+                    somePlayer.toPick = 2
+                    somePlayer.play(0)
+                    assert.fail()
+                }
+                catch (err) {
+                    assert.equal(err.name, 'ExpectedToPickError')
+                }
+            })
         })
     })
 })
