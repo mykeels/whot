@@ -49,5 +49,13 @@ describe('Card', () => {
             assert.isTrue((GetCircle({ value: 1 }).matches(GetWhot({ iNeed: Shapes.Circle }))))
             assert.isTrue((GetWhot({ iNeed: Shapes.Square }).matches(GetSquare({ value: 2 }))))
         })
+
+        it('should NOT match because whot card has no value', () => {
+            assert.isFalse((GetWhot({  }).matches(GetSquare({ value: 13 }))))
+        })
+
+        it('should match because whot card needs a Square', () => {
+            assert.isTrue((GetWhot({ iNeed: Shapes.Square }).matches(GetSquare({ value: 13 }))))
+        })
     })
 })

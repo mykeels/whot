@@ -129,7 +129,7 @@ const Player = function (props) {
                         return card
                     }
                     else {
-                        throw PlayValidationFailedError(JSON.stringify(card))
+                        throw PlayValidationFailedError(JSON.stringify({ top: props.pile().top(), card }))
                     }
                 }
                 else {
