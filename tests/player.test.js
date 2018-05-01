@@ -82,6 +82,18 @@ describe('Player', () => {
                 pile: mockPile
             })
         })
+        
+        it('should initialise emitter when not supplied in prop', () => {
+            const props = { 
+                id: 1, 
+                validator: (card) => true,
+                market: mockMarket,
+                pile: mockPile
+            }
+            assert.isUndefined(props.emitter)
+            const player = new Player(props)
+            assert.isDefined(props.emitter)
+        })
     })
 
     describe('Cards', () => {
