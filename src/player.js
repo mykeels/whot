@@ -63,6 +63,8 @@ const Player = function (props) {
 
     this.turn = false
 
+    this.hasWon = false
+
     this.toPick = 0 //user is expected to pick this number of cards from the market
 
     /**
@@ -121,6 +123,7 @@ const Player = function (props) {
                             if (props.pile().top().move === Moves.None) {
                                 props.emitter.emit('player:checkup', this)
                                 this.emit('checkup')
+                                this.hasWon = true
                             }
                             else {
                                 this.pick()
