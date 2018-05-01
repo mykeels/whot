@@ -4,9 +4,12 @@
   "description": "A Game API for the Nigerian Whot Card Game",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -R spec --watch --recursive ./tests",
     "build": "gulp build",
-    "watch": "gulp watch"
+    "watch": "gulp watch",
+    "test": "mocha -R spec --recursive ./tests",
+    "watch-test": "npm run test --  --watch",
+    "coverage": "nyc mocha ./tests",
+    "watch-coverage": "nodemon --exec npm run coverage"
   },
   "repository": {
     "type": "git",
@@ -31,6 +34,8 @@
     "gulp-streamify": "^1.0.2",
     "gulp-uglify-es": "^0.1.8",
     "mocha": "^4.0.1",
+    "nodemon": "^1.17.3",
+    "nyc": "^11.7.1",
     "uglify-es": "^3.2.2",
     "vinyl-source-stream": "^1.1.0"
   }
