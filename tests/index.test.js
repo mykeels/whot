@@ -4,6 +4,14 @@ const Market = require('../src/market')
 const Shapes = require('../src/shapes')
 const Game = require('../src')
 const logger = require('../src/logger')('index.test.js')
+const {
+    GetCircle,
+    GetStar,
+    GetSquare,
+    GetCross,
+    GetTriangle,
+    GetWhot
+} = require("../src/card")
 
 /**
  * 
@@ -56,6 +64,15 @@ describe('Game', () => {
             for (let i = 1; i <= 50; i++) {
                 if (!endGame) makeRandomPlay(game.turn.next(), game)
             }
+        })
+
+        it('should have Whot! as its first card', () => {
+            const game = new Game({
+                noOfDecks: 1,
+                noOfPlayers: 2,
+                firstCard: GetWhot({  })
+            })
+            assert.equal(game.pile.top().shape, Shapes.Whot)
         })
     })
     

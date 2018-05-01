@@ -18,6 +18,7 @@ const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
  * @param {Object} props
  * @param {Number} props.noOfDecks
  * @param {Number} props.noOfPlayers
+ * @param {Card} props.firstCard override the first card in the game
  */
 const Game = function (props = {}) {
     props.noOfDecks = Number(props.noOfDecks || 1)
@@ -70,7 +71,8 @@ const Game = function (props = {}) {
 
     const playFirstCard = () => {
         const cards = market.pick(1)
-        pile.push(cards)
+        if (props.firstCard) pile.push([ props.firstCard ])
+        else pile.push(cards)
         return cards[0]
     }
     
