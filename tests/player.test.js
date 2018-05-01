@@ -3,7 +3,8 @@ const Player = require('../src/player')
 const Pile = require('../src/pile')
 const Market = require('../src/market')
 const Moves = require('../src/moves')
-const { GetCircle, GetSquare } = require('../src/card')
+const Shapes = require('../src/shapes')
+const { GetCircle, GetSquare, GetWhot } = require('../src/card')
 const EventEmitter = require('events').EventEmitter
 
 const emitter = new EventEmitter()
@@ -231,6 +232,23 @@ describe('Player', () => {
                 somePlayer.play(0)
                 assert.equal(somePlayer.hand().length, 1)
                 assert.isFalse(somePlayer.hasWon)
+            })
+            
+            it('should play iNeed', () => {
+                let somePlayer = new Player({ 
+                    id: 1, 
+                    validator: (card) => true,
+                    emitter: new EventEmitter(),
+                    market: mockMarket,
+                    pile: mockPile
+                })
+                const card1 = GetWhot({  })
+                const card2 = GetCircle({ value: 6 })
+                somePlayer.turn = true
+                somePlayer.add([card1, card2])
+                somePlayer.play(0, Shapes.Circle)
+                assert.equal(pile.top().shape, Shapes.Whot)
+                assert.equal(pile.top().iNeed, Shapes.Circle)
             })
         })
     })
