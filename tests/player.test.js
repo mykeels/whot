@@ -250,6 +250,26 @@ describe('Player', () => {
                 assert.equal(pile.top().shape, Shapes.Whot)
                 assert.equal(pile.top().iNeed, Shapes.Circle)
             })
+            
+            it('should throw PlayValidationFailedError', () => {
+                try {
+                    let somePlayer = new Player({ 
+                        id: 1, 
+                        validator: (card) => true,
+                        emitter: new EventEmitter(),
+                        market: mockMarket,
+                        pile: mockPile
+                    })
+                    const card1 = GetSquare({ value: 6 })
+                    somePlayer.turn = true
+                    somePlayer.add([card1])
+                    somePlayer.play(0)
+                    assert.fail()
+                }
+                catch (err) {
+                    assert.equal(err.name, 'PlayValidationFailedError')
+                }
+            })
         })
     })
 })
