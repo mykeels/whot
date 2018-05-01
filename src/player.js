@@ -24,7 +24,6 @@ const CardNeededUndefinedError = createTypeError('CardNeededUndefinedError')
  * @param {Object} props
  * @param {Number} props.id identifies the player
  * @param {EventEmitter} props.emitter enables event handling and broadcasting
- * @param {function():Boolean} props.validator checks whether or not the player can play the selected card
  * @param {function():Market} props.market returns a Market instance
  * @param {function():Pile} props.pile return a Pile instance
  * 
