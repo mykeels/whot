@@ -1,6 +1,7 @@
 const { assert } = require('chai')
 const emitter = require('../src/events')
 const Card = require("../src/card")
+const Pile = require("../src/pile")
 const Market = require('../src/market')
 
 describe('Market', () => {
@@ -17,14 +18,27 @@ describe('Market', () => {
     describe('Pick(n)', () => {
         it('should remove (n) cards from the market', () => {
             const market = new Market({ noOfDecks: 1, emitter })
-            market.pick(2)
+            const pickedCards = market.pick(2)
+            assert.equal(pickedCards.length, 2)
             assert.equal(market.count(), 52)
+        })
+
+        it('should throw PropNotFoundError because pile() not provided', () => {
+            try {
+                const market = new Market({ noOfDecks: 1, emitter })
+                market.pick(55)
+                assert.fail()
+            }
+            catch (err) {
+                assert.equal(err.name, 'PropNotFoundError')
+            }
         })
 
         it('should throw OutOfRangeError if (n) >= .count*()', () => {
             try {
-                const market = new Market({ noOfDecks: 1, emitter })
-                market.pick(55)
+                const pile = () => (new Pile({ emitter }))
+                const market = new Market({ noOfDecks: 1, emitter, pile })
+                const pickedCards = market.pick(55)
                 assert.fail()
             }
             catch (err) {

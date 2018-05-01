@@ -7,6 +7,7 @@ const EventEmitter = require('events').EventEmitter
 const logger = require('./logger')('market.js')
 
 const OutOfRangeError = createError('OutOfRangeError')
+const PropNotFoundError = createError('PropNotFoundError')
 
 /**
  * 
@@ -40,11 +41,15 @@ const Market = function (props = {}) {
 
     this.pick = (no = 1) => {
         if (no >= cards.length) {
-            if (!props.pile) throw OutOfRangeError('cards')
+            if (!props.pile) throw PropNotFoundError('pile')
             else {
                 // get more cards from the pile
                 props.pile().reset().forEach(card => cards.push(card))
                 cards = cards.sort((a, b) => Math.random() - 0.5)
+
+                if (no > cards.length) {
+                    throw OutOfRangeError('cards') 
+                }
             }
         }
         const pickedCards = cards.splice(0, no)
