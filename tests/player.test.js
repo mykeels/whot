@@ -8,7 +8,7 @@ const EventEmitter = require('events').EventEmitter
 
 const emitter = new EventEmitter()
 const pile = new Pile({ emitter })
-pile.push([ GetCircle({ value: 2 }) ])
+pile.push([ GetCircle({ value: 3 }) ])
 const market = new Market({ noOfDecks: 1, pile, emitter })
 const mockMarket = () => market
 const mockPile = () => pile
@@ -214,6 +214,23 @@ describe('Player', () => {
                 somePlayer.play(0)
                 assert.equal(somePlayer.hand().length, 0)
                 assert.isTrue(somePlayer.hasWon)
+            })
+            
+            it('should pick from market and NOT reach checkup', () => {
+                let somePlayer = new Player({ 
+                    id: 1, 
+                    validator: (card) => true,
+                    emitter: new EventEmitter(),
+                    market: mockMarket,
+                    pile: mockPile
+                })
+                const card1 = GetCircle({ value: 5 })
+                somePlayer.turn = true
+                somePlayer.add([card1])
+                assert.equal(somePlayer.hand().length, 1)
+                somePlayer.play(0)
+                assert.equal(somePlayer.hand().length, 1)
+                assert.isFalse(somePlayer.hasWon)
             })
         })
     })

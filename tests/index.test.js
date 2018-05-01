@@ -81,11 +81,12 @@ describe('Game', () => {
                 noOfPlayers: 2,
                 firstCard: GetWhot({  })
             })
-            const player = game.turn.next()
+            let player = game.turn.next()
 
             while (!player.canPlay()) {
                 const marketCards = player.pick()
                 game.turn.switch()
+                player = game.turn.next()
             }
 
             const compatibleCardIndex = player.hand().findIndex(card => Shapes.Whot !== card.shape)
