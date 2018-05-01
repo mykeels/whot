@@ -74,6 +74,28 @@ describe('Game', () => {
             })
             assert.equal(game.pile.top().shape, Shapes.Whot)
         })
+
+        it('should play !Whot card when whot card is first in the pile', () => {
+            const game = new Game({
+                noOfDecks: 1,
+                noOfPlayers: 2,
+                firstCard: GetWhot({  })
+            })
+            const player = game.turn.next()
+
+            while (!player.canPlay()) {
+                const marketCards = player.pick()
+                game.turn.switch()
+            }
+
+            const compatibleCardIndex = player.hand().findIndex(card => Shapes.Whot !== card.shape)
+            
+            const card = player.hand()[compatibleCardIndex]
+
+            assert.notEqual(card.shape, Shapes.Whot)
+
+            player.play(compatibleCardIndex)
+        })
     })
     
 })

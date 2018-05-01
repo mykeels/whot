@@ -31,14 +31,19 @@ const Pile = function (props = {}) {
 
     this.top = () => (cards[cards.length - 1] || null)
 
+    this.noOfPlays = 0
+
+    this.firstCardIsWhot = () => ((this.top().shape === Shapes.Whot) && (this.noOfPlays === 1))
+
     this.push = (_cards_ = []) => {
         if (Array.isArray(_cards_)) {
             if (_cards_.length > 0) {
                 const lastCard = _cards_[_cards_.length - 1]
-                if (!this.top() || this.top().matches(lastCard)) {
+                if (!this.top() || (this.top().matches(lastCard) || this.firstCardIsWhot())) {
                     this.top() && this.top().reset() //reset card to original config (e.g. set iNeed to null)
                     _cards_.forEach(card => cards.push(card))
                     props.emitter.emit('pile:push', _cards_)
+                    this.noOfPlays += _cards_.length
                 }
                 else {
                     throw LastCardMismatchError({ pile: this.top(), play: lastCard })

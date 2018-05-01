@@ -48,7 +48,7 @@ const Player = function (props) {
      * 
      * @param {Card} card 
      */
-    const validator = (card) => props.pile().top().matches(card)
+    const validator = (card) => (props.pile().top().matches(card) || props.pile().firstCardIsWhot())
 
     /**
      * @type {Card[]}
@@ -95,7 +95,7 @@ const Player = function (props) {
 
     /**
      * @param {Number} index position of card in player.hand() to play
-     * @param {Number} iNeed shape that Whot card takes for (i need)
+     * @param {String} iNeed shape that Whot card takes for (i need)
      */
     this.play = (index, iNeed) => {
         if (this.turn) {
