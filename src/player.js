@@ -47,6 +47,11 @@ const Player = function (props) {
     /**
      * 
      * @param {Card} card 
+     * checks that it is possible to play a card
+     * 
+     * condition is true if:
+     *   - card matches card at the top of the pile
+     *   - top pile card is a Whot!, and is the first card in the game
      */
     const validator = (card) => (props.pile().top().matches(card) || props.pile().firstCardIsWhot())
 
