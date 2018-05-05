@@ -13,6 +13,10 @@ const Shapes = {
 
 module.exports = Shapes
 
+/**
+ * 
+ * @param {string} shape any of "Circle" | "Triangle" | "Cross" | "Square" | "Star" | "Whot"
+ */
 module.exports.renderShape = (shape) => {
     switch (shape) {
         case (Shapes.Circle): return 'c';
