@@ -13,6 +13,10 @@ describe('Turn', () => {
     const player2 = new Player({ id: 2, emitter: new EventEmitter(), validator: () => true, market: () => market })
     const player3 = new Player({ id: 3, emitter: new EventEmitter(), validator: () => true, market: () => market })
 
+    const players = [
+        player1, player2, player3
+    ]
+
     describe('Constructor', () => {
         
         it('should throw InvalidArgumentTypeError if _player_ is not Array', () => {
@@ -23,6 +27,14 @@ describe('Turn', () => {
             catch (err) {
                 assert.equal(err.name, 'InvalidArgumentTypeError')
             }
+        })
+        
+        it('should create props emitter if NOT defined', () => {
+            const props = {
+                players
+            }
+            const turn = new Turn(props)
+            assert.isDefined(props.emitter)
         })
 
         it('should throw PlayersNotEnoughError if props.players.length === 0', () => {
@@ -292,6 +304,20 @@ describe('Turn', () => {
                     emitter: new EventEmitter()
                 })
                 assert.equal(turn.count(), 3)
+            })
+        })
+
+        describe('.all(fn)', () => {
+            it('should be 3', () => {
+                const turn = new Turn({
+                    players: [
+                        player1,
+                        player2,
+                        player3
+                    ],
+                    emitter: new EventEmitter()
+                })
+                assert.equal(turn.all(), 3)
             })
         })
     })
