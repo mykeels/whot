@@ -52,4 +52,6 @@ module.exports.eventify = (self) => {
             listener.apply(self, arguments)
         })
     }
+
+    return self
 }
