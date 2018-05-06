@@ -1284,6 +1284,8 @@ module.exports.eventify = (self) => {
             listener.apply(self, arguments)
         })
     }
+
+    return self
 }
 },{"events":1}],10:[function(require,module,exports){
 const Card = require('./card')
@@ -1306,6 +1308,7 @@ const InvalidArgumentTypeError = createTypeError('InvalidArgumentTypeError')
  * @param {Object} props
  * @param {Number} props.noOfDecks
  * @param {Number} props.noOfPlayers
+ * @param {Card} props.firstCard override the first card in the game
  */
 const Game = function (props = {}) {
     props.noOfDecks = Number(props.noOfDecks || 1)
@@ -1358,7 +1361,8 @@ const Game = function (props = {}) {
 
     const playFirstCard = () => {
         const cards = market.pick(1)
-        pile.push(cards)
+        if (props.firstCard) pile.push([ props.firstCard ])
+        else pile.push(cards)
         return cards[0]
     }
     
@@ -1413,6 +1417,7 @@ const EventEmitter = require('events').EventEmitter
 const logger = require('./logger')('market.js')
 
 const OutOfRangeError = createError('OutOfRangeError')
+const PropNotFoundError = createError('PropNotFoundError')
 
 /**
  * 
@@ -1446,11 +1451,15 @@ const Market = function (props = {}) {
 
     this.pick = (no = 1) => {
         if (no >= cards.length) {
-            if (!props.pile) throw OutOfRangeError('cards')
+            if (!props.pile) throw PropNotFoundError('pile')
             else {
                 // get more cards from the pile
                 props.pile().reset().forEach(card => cards.push(card))
                 cards = cards.sort((a, b) => Math.random() - 0.5)
+
+                if (no > cards.length) {
+                    throw OutOfRangeError('cards') 
+                }
             }
         }
         const pickedCards = cards.splice(0, no)
@@ -1524,14 +1533,19 @@ const Pile = function (props = {}) {
 
     this.top = () => (cards[cards.length - 1] || null)
 
+    this.noOfPlays = 0
+
+    this.firstCardIsWhot = () => ((this.top().shape === Shapes.Whot) && (this.noOfPlays === 1))
+
     this.push = (_cards_ = []) => {
         if (Array.isArray(_cards_)) {
             if (_cards_.length > 0) {
                 const lastCard = _cards_[_cards_.length - 1]
-                if (!this.top() || this.top().matches(lastCard)) {
+                if (!this.top() || (this.top().matches(lastCard) || this.firstCardIsWhot())) {
                     this.top() && this.top().reset() //reset card to original config (e.g. set iNeed to null)
                     _cards_.forEach(card => cards.push(card))
                     props.emitter.emit('pile:push', _cards_)
+                    this.noOfPlays += _cards_.length
                 }
                 else {
                     throw LastCardMismatchError({ pile: this.top(), play: lastCard })
@@ -1580,7 +1594,6 @@ const CardNeededUndefinedError = createTypeError('CardNeededUndefinedError')
  * @param {Object} props
  * @param {Number} props.id identifies the player
  * @param {EventEmitter} props.emitter enables event handling and broadcasting
- * @param {function():Boolean} props.validator checks whether or not the player can play the selected card
  * @param {function():Market} props.market returns a Market instance
  * @param {function():Pile} props.pile return a Pile instance
  * 
@@ -1603,8 +1616,13 @@ const Player = function (props) {
     /**
      * 
      * @param {Card} card 
+     * checks that it is possible to play a card
+     * 
+     * condition is true if:
+     *   - card matches card at the top of the pile
+     *   - top pile card is a Whot!, and is the first card in the game
      */
-    const validator = (card) => props.pile().top().matches(card)
+    const validator = (card) => (props.pile().top().matches(card) || props.pile().firstCardIsWhot())
 
     /**
      * @type {Card[]}
@@ -1614,6 +1632,8 @@ const Player = function (props) {
     this.id = props.id
 
     this.turn = false
+
+    this.hasWon = false
 
     this.toPick = 0 //user is expected to pick this number of cards from the market
 
@@ -1651,7 +1671,7 @@ const Player = function (props) {
 
     /**
      * @param {Number} index position of card in player.hand() to play
-     * @param {Number} iNeed shape that Whot card takes for (i need)
+     * @param {String} iNeed shape that Whot card takes for (i need)
      */
     this.play = (index, iNeed) => {
         if (this.turn) {
@@ -1673,6 +1693,7 @@ const Player = function (props) {
                             if (props.pile().top().move === Moves.None) {
                                 props.emitter.emit('player:checkup', this)
                                 this.emit('checkup')
+                                this.hasWon = true
                             }
                             else {
                                 this.pick()
@@ -1685,7 +1706,7 @@ const Player = function (props) {
                         return card
                     }
                     else {
-                        throw PlayValidationFailedError(JSON.stringify(card))
+                        throw PlayValidationFailedError(JSON.stringify({ top: props.pile().top(), card }))
                     }
                 }
                 else {
@@ -1731,6 +1752,10 @@ const Shapes = {
 
 module.exports = Shapes
 
+/**
+ * 
+ * @param {string} shape any of "Circle" | "Triangle" | "Cross" | "Square" | "Star" | "Whot"
+ */
 module.exports.renderShape = (shape) => {
     switch (shape) {
         case (Shapes.Circle): return 'c';
