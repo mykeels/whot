@@ -60,3 +60,4 @@ typings/
 .DS_STORE
 
 dist
+.env

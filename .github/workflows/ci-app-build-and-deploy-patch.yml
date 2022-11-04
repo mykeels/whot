@@ -1,0 +1,46 @@
+name: Build and Deploy Patch Release
+
+on:
+  push:
+    branches: [ 'master' ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      app-dir: ./
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: 'https://registry.npmjs.org'
+
+    - run: npm ci
+      working-directory: ${{ env.app-dir }}
+    - run: npm run build
+      working-directory: ${{ env.app-dir }}
+
+    # release
+    - run: git reset --hard
+    - run: npm version patch  --git-tag-version false
+    - name: commit version bump
+      run: |
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -m "bump version to $(node -p -e "require('./package.json').version") [skip ci]" -a
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.OUR_GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+        tags: true
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
