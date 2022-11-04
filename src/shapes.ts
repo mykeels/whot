@@ -1,8 +1,9 @@
+export type CardShape = "Circle" | "Triangle" | "Cross" | "Square" | "Star" | "Whot";
+
 /**
  * shapes determine the type of a card
  */
-
-const Shapes = {
+export const Shapes = {
     Circle: 'Circle',
     Triangle: 'Triangle',
     Cross: 'Cross',
@@ -11,13 +12,7 @@ const Shapes = {
     Whot: 'Whot'
 }
 
-module.exports = Shapes
-
-/**
- * 
- * @param {string} shape any of "Circle" | "Triangle" | "Cross" | "Square" | "Star" | "Whot"
- */
-module.exports.renderShape = (shape) => {
+export const renderShape = (shape: CardShape) => {
     switch (shape) {
         case (Shapes.Circle): return 'c';
         case (Shapes.Cross): return '+';
@@ -28,3 +23,5 @@ module.exports.renderShape = (shape) => {
         default: return shape;
     }
 }
+
+export default Shapes;
