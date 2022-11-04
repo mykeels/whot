@@ -18,6 +18,8 @@ export const Moves: Record<CardMove, CardMove> = {
   None: "None",
 };
 
+export default Moves;
+
 export const GetMove = (value: number): CardMove => {
   return value === 2
     ? Moves.PickTwo

@@ -1,13 +1,13 @@
 import { EventEmitter } from "events";
 
-export const Events = new EventEmitter();
+export const emitter = new EventEmitter();
 
-export default Events;
+export default emitter;
 
 export { EventEmitter };
 
 export const raiseEvent = (name: string, ...args: any[]) => {
-  Events.emit(name, ...args);
+  emitter.emit(name, ...args);
 };
 
 type EventListener = (data: any) => any;

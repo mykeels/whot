@@ -8,7 +8,7 @@ type CardProps = {
   shape: CardShape;
   move?: CardMove;
   image?: string;
-  iNeed: CardShape;
+  iNeed?: CardShape;
 };
 
 /**
@@ -19,7 +19,7 @@ export class Card {
   shape: CardShape;
   move: CardMove;
   image?: string;
-  iNeed: CardShape | null;
+  iNeed?: CardShape;
 
   constructor(props: CardProps) {
     this.value = props.value;
@@ -41,7 +41,7 @@ export class Card {
   render = () => `${this.shape} (${this.value})`;
 
   reset = () => {
-    this.iNeed = null;
+    this.iNeed = undefined;
   };
 
   get score() {
@@ -51,32 +51,32 @@ export class Card {
 }
 export default Card;
 
-export const GetTriangle = (props: CardProps) =>
+export const GetTriangle = (props: Omit<CardProps, "shape">) =>
   new Card({
     ...props,
     shape: Shapes.Triangle,
   });
-export const GetCircle = (props: CardProps) =>
+export const GetCircle = (props: Omit<CardProps, "shape">) =>
   new Card({
     ...props,
     shape: Shapes.Circle,
   });
-export const GetSquare = (props: CardProps) =>
+export const GetSquare = (props: Omit<CardProps, "shape">) =>
   new Card({
     ...props,
     shape: Shapes.Square,
   });
-export const GetStar = (props: CardProps) =>
+export const GetStar = (props: Omit<CardProps, "shape">) =>
   new Card({
     ...props,
     shape: Shapes.Star,
   });
-export const GetCross = (props: CardProps) =>
+export const GetCross = (props: Omit<CardProps, "shape">) =>
   new Card({
     ...props,
     shape: Shapes.Cross,
   });
-export const GetWhot = (props: CardProps) =>
+export const GetWhot = (props: Omit<CardProps, "shape">) =>
   new Card({
     ...props,
     shape: Shapes.Whot,

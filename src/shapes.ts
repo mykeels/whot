@@ -3,7 +3,7 @@ export type CardShape = "Circle" | "Triangle" | "Cross" | "Square" | "Star" | "W
 /**
  * shapes determine the type of a card
  */
-export const Shapes = {
+export const Shapes: Record<CardShape, CardShape> = {
     Circle: 'Circle',
     Triangle: 'Triangle',
     Cross: 'Cross',

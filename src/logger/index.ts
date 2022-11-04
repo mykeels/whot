@@ -22,3 +22,5 @@ export const createLogger = (name: string) => {
       ),
   };
 };
+
+export default createLogger;
