@@ -2,7 +2,7 @@ name: Build and Deploy Alpha Release
 
 on:
   push:
-    branches: ['!master']
+    branches-ignore: ["master"]
 
 jobs:
   build:
