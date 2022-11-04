@@ -1,8 +1,8 @@
-const { eventify, raiseEvent } = require('../src/events')
+import { eventify, raiseEvent } from '../src/events'
 
-const Events = require('../src/events')
+import Events from '../src/events'
 
-const { assert } = require('chai')
+import { assert } from 'chai'
 
 
 describe('Eventify', () => {
@@ -19,15 +19,15 @@ describe('Eventify', () => {
     describe('.on()', () => {
         it('should create an array in events', () => {
             const target = eventify({})
-            target.on('custom:name', () => ({}))
-            assert.isArray(target.events['custom:name'])
+            target.on?.('custom:name', () => ({}))
+            assert.isArray(target.events?.['custom:name'])
         })
         
         it('should add to array in events', () => {
             const target = eventify({})
-            target.on('custom:name', () => ({}))
-            target.on('custom:name', () => ({}))
-            assert.equal(target.events['custom:name'].length, 2)
+            target.on?.('custom:name', () => ({}))
+            target.on?.('custom:name', () => ({}))
+            assert.equal(target.events?.['custom:name'].length, 2)
         })
     })
 
@@ -36,11 +36,11 @@ describe('Eventify', () => {
         it('should change value to true', () => {
             const target = eventify({})
 
-            target.on('value:toggle', () => {
+            target.on?.('value:toggle', () => {
                 value = true
             })
 
-            target.emit('value:toggle')
+            target.emit?.('value:toggle', null)
 
             assert.isTrue(value)
         })
@@ -50,11 +50,11 @@ describe('Eventify', () => {
         it('should have event count as zero', () => {
             const target = eventify({})
             const listener = () => ({})
-            target.on('custom:name', listener)
-            assert.equal(target.events['custom:name'].length, 1)
+            target.on?.('custom:name', listener)
+            assert.equal(target.events?.['custom:name'].length, 1)
 
-            target.removeListener('custom:name', listener)
-            assert.equal(target.events['custom:name'].length, 0)
+            target.removeListener?.('custom:name', listener)
+            assert.equal(target.events?.['custom:name'].length, 0)
         })
     })
 
@@ -62,11 +62,11 @@ describe('Eventify', () => {
         it('should always have events count as 1', () => {
             const target = eventify({})
             const listener = () => ({})
-            target.once('custom:name', listener)
-            assert.equal(target.events['custom:name'].length, 1)
+            target.once?.('custom:name', listener)
+            assert.equal(target.events?.['custom:name'].length, 1)
 
-            target.emit('custom:name')
-            assert.equal(target.events['custom:name'].length, 0)
+            target.emit?.('custom:name', null)
+            assert.equal(target.events?.['custom:name'].length, 0)
         })
     })
 })

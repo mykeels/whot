@@ -61,7 +61,7 @@ export class Pile {
         throw NoCardSuppliedError("");
       }
     } else {
-      throw InvalidArgumentTypeError("_cards_", "Array");
+      throw InvalidArgumentTypeError("_cards_", Array);
     }
   };
   reset = () => {

@@ -13,7 +13,7 @@ const InvalidArgumentTypeError = createTypeError("InvalidArgumentTypeError");
 type GameProps = {
   noOfDecks: number;
   noOfPlayers: number;
-  firstCard: Card;
+  firstCard?: Card;
 };
 
 export class Game {
@@ -27,9 +27,9 @@ export class Game {
 
   constructor(props: GameProps) {
     if (!Number(props.noOfDecks))
-      throw InvalidArgumentTypeError("props.noOfDecks", "Number");
+      throw InvalidArgumentTypeError("props.noOfDecks", Number);
     if (!Number(props.noOfPlayers))
-      throw InvalidArgumentTypeError("props.noOfPlayers", "Number");
+      throw InvalidArgumentTypeError("props.noOfPlayers", Number);
     this.noOfDecks = Number(props.noOfDecks || 1);
     this.noOfPlayers = props.noOfPlayers;
 

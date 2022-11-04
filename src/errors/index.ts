@@ -8,9 +8,9 @@ export const createError = (name: string) => {
 
 export default createError;
 
-type WhotTypeError = InstanceType<typeof TypeError> & { type?: string };
+type WhotTypeError = InstanceType<typeof TypeError> & { type?: Function };
 export const createTypeError = (name: string) => {
-  return (message: string, type: string) => {
+  return (message: string, type: Function) => {
     const error: WhotTypeError = new TypeError(message);
     error.type = type;
     error.name = name;

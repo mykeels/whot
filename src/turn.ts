@@ -32,7 +32,7 @@ export class Turn {
 
   constructor(props: TurnProps) {
     if (!Array.isArray(props.players)) {
-      throw InvalidArgumentTypeError("props.players", "Array");
+      throw InvalidArgumentTypeError("props.players", Array);
     }
     if (!props.emitter) {
       logger.warn("props.emitter not undefined");
@@ -55,7 +55,7 @@ export class Turn {
 
   next = () => this.players.find((player) => player.turn);
 
-  all = (fn: (player: Player) => void) => {
+  all = (fn?: (player: Player) => void) => {
     if (fn && typeof fn === "function") this.players.forEach(fn);
     return this.players.length;
   };
@@ -155,7 +155,7 @@ export class Turn {
   /**
    * @param {Boolean} isStar check if the card played is a star
    */
-  suspension = (isStar: boolean, noSwitch?: boolean) => {
+  suspension = (isStar?: boolean, noSwitch?: boolean) => {
     this.emitter.emit("turn:suspension", this.skipped(isStar ? 2 : 1));
     if (!noSwitch) this.switch(isStar ? 2 : 1);
   };

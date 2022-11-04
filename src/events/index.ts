@@ -10,7 +10,7 @@ export const raiseEvent = (name: string, ...args: any[]) => {
   emitter.emit(name, ...args);
 };
 
-type EventListener = (data: any) => any;
+type EventListener = (...dataArgs: any[]) => any;
 type Emitter<TOriginal> = Partial<{
   events: Record<string, EventListener[]>;
   on: (
@@ -21,7 +21,7 @@ type Emitter<TOriginal> = Partial<{
     event: string,
     listener: EventListener
   ) => TOriginal & Emitter<TOriginal>;
-  emit: (event: string, data: any) => TOriginal & Emitter<TOriginal>;
+  emit: (event: string, ...dataArgs: any[]) => TOriginal & Emitter<TOriginal>;
   once: (
     event: string,
     listener: EventListener

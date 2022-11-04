@@ -77,7 +77,7 @@ export class Player {
       this.emitter.emit("player:add", _cards_);
       this.emit("add", _cards_);
     } else {
-      throw InvalidArgumentTypeError("_cards_", "Array");
+      throw InvalidArgumentTypeError("_cards_", Array);
     }
   };
 
@@ -86,7 +86,7 @@ export class Player {
   pick = () => {
     const marketCards = this.market().pick(this.toPick || 1);
     if (!Array.isArray(marketCards))
-      throw InvalidArgumentTypeError("marketCards", "Array");
+      throw InvalidArgumentTypeError("marketCards", Array);
     this.add(marketCards);
     this.emit("market", marketCards);
     this.emitter.emit("player:market", this, marketCards);
@@ -94,7 +94,7 @@ export class Player {
     return marketCards;
   };
 
-  play = (index: number, iNeed: CardShape) => {
+  play = (index: number, iNeed?: CardShape) => {
     if (this.turn) {
       const card = this.cards[index];
       if (card) {
@@ -103,7 +103,7 @@ export class Player {
             if (!iNeed) {
               throw CardNeededUndefinedError(
                 `player: ${this.id}, card: ${card.shape}, iNeed: ${iNeed}`,
-                "String"
+                String
               );
             } else {
               card.iNeed = iNeed;
@@ -158,7 +158,7 @@ export class Player {
     this.cards.findIndex((card) => card.matches(this.pile().top())) >= 0 &&
     this.toPick === 0;
 
-  canMatchMove = (move: CardMove) =>
+  canMatchMove = (move?: CardMove) =>
     this.cards.findIndex(
       (card) => card.move === (move || this.pile().top().move)
     ) >= 0;
