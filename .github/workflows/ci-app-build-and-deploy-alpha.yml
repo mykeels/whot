@@ -1,0 +1,35 @@
+name: Build and Deploy Alpha Release
+
+on:
+  push:
+    branches-ignore: ["master"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      app-dir: ./
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        registry-url: 'https://registry.npmjs.org'
+
+    - run: npm ci
+      working-directory: ${{ env.app-dir }}
+    - run: npm run build
+      working-directory: ${{ env.app-dir }}
+
+    # release
+    - run: git reset --hard
+    - run: npm version prepatch --preid alpha-$GITHUB_RUN_NUMBER --git-tag-version false
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
