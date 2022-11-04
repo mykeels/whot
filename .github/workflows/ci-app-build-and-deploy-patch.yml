@@ -26,9 +26,13 @@ jobs:
       working-directory: ${{ env.app-dir }}
     - run: npm run build
       working-directory: ${{ env.app-dir }}
+    - run: ls ./dist
+      working-directory: ${{ env.app-dir }}
 
     # release
     - run: git reset --hard
+    - run: ls ./dist
+      working-directory: ${{ env.app-dir }}
     - run: npm version patch  --git-tag-version false
     - name: commit version bump
       run: |

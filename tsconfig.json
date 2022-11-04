@@ -15,7 +15,7 @@
     "outDir": "./dist"
   },
   "compileOnSave": false,
-  "include": ["typings/**/*.d.ts", "src/**/*.ts", "tests/**/*.ts"],
+  "include": ["typings/**/*.d.ts", "src"],
   "exclude": [
     "node_modules/",
     "dist",

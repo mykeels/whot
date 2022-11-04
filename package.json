@@ -3,13 +3,13 @@
   "version": "1.0.7",
   "description": "A Game API for the Nigerian Whot Card Game",
   "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "typings": "dist/index.d.ts",
   "files": [
-    "./dist"
+    "dist/**"
   ],
   "scripts": {
     "watch": "tsc --watch -p ./tsconfig.json",
-    "build": "tsc -p ./tsconfig.json",
+    "build": "tsc -p ./tsconfig.json && tsc -p ./tsconfig-tests.json",
     "test": "mocha -r ts-node/register -R spec --recursive 'tests/**/*.ts'",
     "test:watch": "npm run test --  --watch"
   },
