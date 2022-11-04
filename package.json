@@ -7,9 +7,7 @@
     "watch": "tsc --watch -p ./tsconfig.json",
     "build": "tsc -p ./tsconfig.json",
     "test": "mocha -r ts-node/register -R spec --recursive 'tests/**/*.ts'",
-    "test:watch": "npm run test --  --watch",
-    "coverage": "nyc mocha ./tests",
-    "watch-coverage": "nodemon --exec npm run coverage"
+    "test:watch": "npm run test --  --watch"
   },
   "devDependencies": {
     "@types/chai": "^4.3.3",
@@ -17,8 +15,6 @@
     "@types/node": "^18.11.9",
     "chai": "^4.3.6",
     "mocha": "^10.1.0",
-    "nodemon": "^1.17.3",
-    "nyc": "^11.7.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.4"
   },
