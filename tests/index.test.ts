@@ -2,7 +2,7 @@ import { assert } from "chai";
 import Shapes, { CardShape } from "../src/shapes";
 import Game from "../src";
 import createLogger from "../src/logger";
-import Card, { GetWhot } from "../src/card";
+import Card from "../src/card";
 import Player from "../src/player";
 
 const logger = createLogger("index.test.js");
@@ -92,7 +92,7 @@ describe("Game", () => {
       const game = new Game({
         noOfDecks: 1,
         noOfPlayers: 2,
-        firstCard: GetWhot({
+        firstCard: Card.createWhotCard({
             value: 20
         }),
       });
@@ -103,7 +103,7 @@ describe("Game", () => {
       const game = new Game({
         noOfDecks: 1,
         noOfPlayers: 2,
-        firstCard: GetWhot({
+        firstCard: Card.createWhotCard({
             value: 20
         }),
       });

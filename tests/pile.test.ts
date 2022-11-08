@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import { GetCircle, GetSquare } from "../src/card";
+import { Card } from "../src/card";
 import emitter from "../src/events";
 import Pile from "../src/pile";
 
@@ -37,8 +37,8 @@ describe("Pile", () => {
     it("should throw LastCardMismatchError", () => {
       try {
         const pile = new Pile({ emitter });
-        const card = GetCircle({ value: 1 });
-        const card2 = GetSquare({ value: 2 });
+        const card = Card.createCircleCard({ value: 1 });
+        const card2 = Card.createSquareCard({ value: 2 });
         pile.push([card]);
         pile.push([card2]);
         assert.fail();
@@ -49,7 +49,7 @@ describe("Pile", () => {
 
     it("should work", () => {
       const pile = new Pile({ emitter });
-      const card = GetCircle({ value: 1 });
+      const card = Card.createCircleCard({ value: 1 });
       pile.push([card]);
       assert.deepEqual(pile.top(), card);
     });

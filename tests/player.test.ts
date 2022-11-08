@@ -4,12 +4,12 @@ import Pile from "../src/pile";
 import Market from "../src/market";
 import Moves from "../src/moves";
 import Shapes from "../src/shapes";
-import { GetCircle, GetSquare, GetWhot } from "../src/card";
+import { Card } from "../src/card";
 import { EventEmitter } from "../src/events";
 
 const emitter = new EventEmitter();
 const pile = new Pile({ emitter });
-pile.push([GetCircle({ value: 3 })]);
+pile.push([Card.createCircleCard({ value: 3 })]);
 const market = new Market({ noOfDecks: 1, pile: () => pile, emitter });
 const mockMarket = () => market;
 const mockPile = () => pile;
@@ -206,8 +206,8 @@ describe("Player", () => {
           market: mockMarket,
           pile: mockPile,
         });
-        const card1 = GetCircle({ value: 4 });
-        const card2 = GetSquare({ value: 2 });
+        const card1 = Card.createCircleCard({ value: 4 });
+        const card2 = Card.createSquareCard({ value: 2 });
         somePlayer.turn = true;
         somePlayer.add([card1, card2]);
         assert.equal(somePlayer.hand().length, 2);
@@ -224,7 +224,7 @@ describe("Player", () => {
           market: mockMarket,
           pile: mockPile,
         });
-        const card1 = GetCircle({ value: 4 });
+        const card1 = Card.createCircleCard({ value: 4 });
         somePlayer.turn = true;
         somePlayer.add([card1]);
         assert.equal(somePlayer.hand().length, 1);
@@ -242,7 +242,7 @@ describe("Player", () => {
           market: mockMarket,
           pile: mockPile,
         });
-        const card1 = GetCircle({ value: 5 });
+        const card1 = Card.createCircleCard({ value: 5 });
         somePlayer.turn = true;
         somePlayer.add([card1]);
         assert.equal(somePlayer.hand().length, 1);
@@ -260,10 +260,10 @@ describe("Player", () => {
           market: mockMarket,
           pile: mockPile,
         });
-        const card1 = GetWhot({
-            value: 20
+        const card1 = Card.createWhotCard({
+          value: 20,
         });
-        const card2 = GetCircle({ value: 6 });
+        const card2 = Card.createCircleCard({ value: 6 });
         somePlayer.turn = true;
         somePlayer.add([card1, card2]);
         somePlayer.play(0, Shapes.Circle);
@@ -281,7 +281,7 @@ describe("Player", () => {
             market: mockMarket,
             pile: mockPile,
           });
-          const card1 = GetSquare({ value: 6 });
+          const card1 = Card.createSquareCard({ value: 6 });
           somePlayer.turn = true;
           somePlayer.add([card1]);
           somePlayer.play(0);
@@ -301,8 +301,8 @@ describe("Player", () => {
             market: mockMarket,
             pile: mockPile,
           });
-          const card1 = GetCircle({ value: 2 });
-          const card2 = GetCircle({ value: 6 });
+          const card1 = Card.createCircleCard({ value: 2 });
+          const card2 = Card.createCircleCard({ value: 6 });
           somePlayer.turn = true;
           somePlayer.add([card1, card2]);
           somePlayer.play(0);
@@ -324,8 +324,8 @@ describe("Player", () => {
             market: mockMarket,
             pile: mockPile,
           });
-          const card1 = GetWhot({
-              value: 0
+          const card1 = Card.createWhotCard({
+            value: 0,
           });
           somePlayer.turn = true;
           somePlayer.add([card1]);

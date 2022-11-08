@@ -1,6 +1,6 @@
 import { CardShape } from "./shapes";
 
-import Shapes from "./shapes";
+import { Shapes } from "./shapes";
 import { CardMove, GetMove } from "./moves";
 
 type CardProps = {
@@ -48,36 +48,41 @@ export class Card {
     if (this.shape === Shapes.Star) return this.value * 2;
     else return this.value;
   }
+
+  static createTriangleCard = (props: Omit<CardProps, "shape">) =>
+    new Card({
+      ...props,
+      shape: Shapes.Triangle,
+    });
+
+  static createCircleCard = (props: Omit<CardProps, "shape">) =>
+    new Card({
+      ...props,
+      shape: Shapes.Circle,
+    });
+
+  static createSquareCard = (props: Omit<CardProps, "shape">) =>
+    new Card({
+      ...props,
+      shape: Shapes.Square,
+    });
+
+  static createStarCard = (props: Omit<CardProps, "shape">) =>
+    new Card({
+      ...props,
+      shape: Shapes.Star,
+    });
+
+  static createCrossCard = (props: Omit<CardProps, "shape">) =>
+    new Card({
+      ...props,
+      shape: Shapes.Cross,
+    });
+
+  static createWhotCard = (props: Omit<CardProps, "shape">) =>
+    new Card({
+      ...props,
+      shape: Shapes.Whot,
+    });
 }
 export default Card;
-
-export const GetTriangle = (props: Omit<CardProps, "shape">) =>
-  new Card({
-    ...props,
-    shape: Shapes.Triangle,
-  });
-export const GetCircle = (props: Omit<CardProps, "shape">) =>
-  new Card({
-    ...props,
-    shape: Shapes.Circle,
-  });
-export const GetSquare = (props: Omit<CardProps, "shape">) =>
-  new Card({
-    ...props,
-    shape: Shapes.Square,
-  });
-export const GetStar = (props: Omit<CardProps, "shape">) =>
-  new Card({
-    ...props,
-    shape: Shapes.Star,
-  });
-export const GetCross = (props: Omit<CardProps, "shape">) =>
-  new Card({
-    ...props,
-    shape: Shapes.Cross,
-  });
-export const GetWhot = (props: Omit<CardProps, "shape">) =>
-  new Card({
-    ...props,
-    shape: Shapes.Whot,
-  });

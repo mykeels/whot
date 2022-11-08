@@ -1,14 +1,6 @@
 import createLogger from "./logger";
 import { EventEmitter } from "./events";
-import {
-  GetCircle,
-  GetStar,
-  GetSquare,
-  GetCross,
-  GetTriangle,
-  GetWhot,
-  Card,
-} from "./card";
+import { Card } from "./card";
 
 const logger = createLogger("deck.js");
 const circles = [1, 2, 3, 4, 5, 7, 8, 10, 11, 12, 13, 14];
@@ -42,12 +34,12 @@ export class Deck {
 
   shuffle() {
     this.cards = [
-      ...circles.map((value) => GetCircle({ value })),
-      ...triangles.map((value) => GetTriangle({ value })),
-      ...crosses.map((value) => GetCross({ value })),
-      ...squares.map((value) => GetSquare({ value })),
-      ...stars.map((value) => GetStar({ value })),
-      ...whots.map((value) => GetWhot({ value })),
+      ...circles.map((value) => Card.createCircleCard({ value })),
+      ...triangles.map((value) => Card.createTriangleCard({ value })),
+      ...crosses.map((value) => Card.createCrossCard({ value })),
+      ...squares.map((value) => Card.createSquareCard({ value })),
+      ...stars.map((value) => Card.createStarCard({ value })),
+      ...whots.map((value) => Card.createWhotCard({ value })),
     ];
     this.cards = this.cards
       .map((card, index) => index)
